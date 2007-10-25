@@ -7,7 +7,8 @@
   in 1996 using classification trees as single classifiers.  }
 
 \usage{
-  adaboost.M1(formula, data, boos = TRUE, mfinal = 100, coeflearn = 'Breiman', minsplit = 5, cp = 0.01, maxdepth = nlevels(vardep))
+  adaboost.M1(formula, data, boos = TRUE, mfinal = 100, coeflearn = 'Breiman', 
+	minsplit = 5, cp = 0.01, maxdepth = nlevels(vardep))
 }
 
 \arguments{
@@ -42,13 +43,13 @@
    This measure is the number of times each variable is selected to split.  }
 }
 
-\references{Alfaro, E., Gamez, M. and Garcia, N. (2006): ``Multiclass corporate failure prediction by Adaboost.M1''. To appear in International Advances in Economic Research.
+\references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
 
   Freund, Y. and Schapire, R.E. (1996): ``Experiments with a New Boosting Algorithm''. In Proceedings of the Thirteenth International Conference on Machine Learning, pp. 148--156, Morgan Kaufmann. 
 
   Breiman, L. (1998): ``Arcing classifiers''. The Annals of Statistics, Vol 26, 3, pp. 801--849. }
 
-\author{Esteban Alfaro Cortés \email{Esteban.Alfaro@uclm.es}, Matías Gámez Martínez \email{Matias.Gamez@uclm.es} and Noelia García Rubio \email{Noelia.Garcia@uclm.es} }
+\author{Esteban Alfaro Cortes \email{Esteban.Alfaro@uclm.es}, Matias Gamez Martinez \email{Matias.Gamez@uclm.es} and Noelia Garcia Rubio \email{Noelia.Garcia@uclm.es} }
 
 
 \seealso{ 
@@ -61,7 +62,8 @@
 library(rpart)
 data(iris)
 names(iris)<-c("LS","AS","LP","AP","Especies")
-iris.adaboost <- adaboost.M1(Especies~LS +AS +LP+ AP, data=iris, boos=TRUE, mfinal=10)
+iris.adaboost <- adaboost.M1(Especies~LS +AS +LP+ AP, data=iris, boos=TRUE, 
+	mfinal=10)
 
 ## rpart and mlbench libraries should be loaded
 ## Comparing the test error of rpart and adaboost.M1
@@ -98,7 +100,8 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-Vehicle.adaboost <- adaboost.M1(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, maxdepth=maxdepth)
+Vehicle.adaboost <- adaboost.M1(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, 
+	maxdepth=maxdepth)
 Vehicle.adaboost.pred <- predict.boosting(Vehicle.adaboost,newdata=Vehicle[-sub, ])
 Vehicle.adaboost.pred[-1]
 
