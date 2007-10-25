@@ -37,12 +37,13 @@
   \item{error }{returns the average error.}
 }
 
-\references{Alfaro, E.; Gámez, M. and García, N. (2006): "Multiclass corporate failure prediction by Adaboost.M1". To appear in International Advances in Economic Research.
+\references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
 
 	Freund, Y. and Schapire, R.E. (1996): "Experiments with a New Boosting Algorithm". En Proceedings of the Thirteenth International Conference on Machine Learning, pp. 148--156, Morgan Kaufmann. 
 	
 	Breiman, L. (1998): "Arcing classifiers". The Annals of Statistics, Vol 26, 3, pp. 801--849. }
-\author{Esteban Alfaro Cortés \email{Esteban.Alfaro@uclm.es}, Matías Gámez Martínez \email{Matias.Gamez@uclm.es} and Noelia García Rubio \email{Noelia.Garcia@uclm.es}} 
+
+\author{Esteban Alfaro Cortes \email{Esteban.Alfaro@uclm.es}, Matias Gamez Martinez \email{Matias.Gamez@uclm.es} and Noelia Garcia Rubio \email{Noelia.Garcia@uclm.es} }
 
 
 % ~Make other sections like Warning with \section{Warning }{....} ~
@@ -96,7 +97,8 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-Vehicle.adaboost <- adaboost.M1(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, maxdepth=maxdepth)
+Vehicle.adaboost <- adaboost.M1(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, 
+	maxdepth=maxdepth)
 Vehicle.adaboost.pred <- predict.boosting(Vehicle.adaboost,newdata=Vehicle[-sub, ])
 Vehicle.adaboost.pred[-1]
 
