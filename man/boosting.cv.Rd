@@ -1,7 +1,7 @@
 \name{boosting.cv}
 \alias{boosting.cv}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Runs v-fold cross validation with adaboost.M1 }
+\title{ Runs v-fold cross validation with Adaboost.M1 }
 
 \description{
 	The data are divided into \code{v} non-overlapping subsets of roughly equal size. Then, \code{adaboost.M1}
@@ -11,7 +11,7 @@
 
 \usage{
 boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100, 
- coeflearn = "Breiman", minsplit = 5, cp = 0.01, maxdepth = nlevels(vardep))
+ coeflearn = "Breiman", control)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{  
@@ -29,12 +29,7 @@ boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100,
 	or the number of trees to use. Defaults to \code{mfinal=100} iterations.}
   \item{coeflearn}{ if "Breiman"(by default), \code{alpha=1/2ln((1-err)/err)} is used. 
 	If "Freund" \code{alpha=ln((1-err)/err)} is used. Where \code{alpha} is the weight updating coefficient. }
-  \item{minsplit}{the minimum number of observations that must exist in a node, in order for a split to be attempted.}
-  \item{cp}{complexity parameter. Any split that does not decrease the overall 
-	lack of fit by a factor of \code{cp} is not attempted. }
-  \item{maxdepth}{set the maximum depth of any node of the final tree, with the root node counted as depth 0 
-	(past 30 rpart will give nonsense results on 32-bit machines).  Defaults to the number of classes.}
-
+  \item{control}{options that control details of the rpart algorithm. See rpart.control for more details.  }
 }
 
 
@@ -47,7 +42,7 @@ boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100,
 
 \references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
 
-	Freund, Y. and Schapire, R.E. (1996): "Experiments with a New Boosting Algorithm". In Proceedings of the Thirteenth International Conference on Machine Learning, pp. 148--156, Morgan Kaufmann. 
+	Freund, Y. and Schapire, R.E. (1996): "Experiments with a new boosting algorithm". In Proceedings of the Thirteenth International Conference on Machine Learning, pp. 148--156, Morgan Kaufmann. 
 
 	Breiman, L. (1998): "Arcing classifiers". The Annals of Statistics, Vol 26, 3, pp. 801--849. }
 
@@ -66,18 +61,21 @@ boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100,
 library(rpart)
 data(iris)
 names(iris)<-c("LS","AS","LP","AP","Especies")
-iris.boostcv <- boosting.cv(Especies ~ ., v=10, data=iris, mfinal=10, maxdepth=3)
+iris.boostcv <- boosting.cv(Especies ~ ., v=10, data=iris, mfinal=10, control=rpart.control(cp=0.01))
+iris.boostcv[-1]
+
 
 data(kyphosis)
 kyphosis.boostcv <- boosting.cv(Kyphosis ~ Age + Number + Start, data=kyphosis, 
 	mfinal=15)
+kyphosis.boostcv[-1]
 
 ## rpart and mlbench libraries should be loaded
 ## Data Vehicle (four classes) 
 library(rpart)
 library(mlbench)
 data(Vehicle)
-Vehicle.boost.cv <- boosting.cv(Class ~.,data=Vehicle,mfinal=25, maxdepth=5)
+Vehicle.boost.cv <- boosting.cv(Class ~.,data=Vehicle,mfinal=25, control=rpart.control(maxdepth=5))
 Vehicle.boost.cv[-1]
 
 }

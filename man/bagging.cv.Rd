@@ -10,8 +10,7 @@
 }
 
 \usage{
-bagging.cv(formula, data, v = 10, mfinal = 100, minsplit = 5, 
-	cp = 0.01, maxdepth = nlevels(vardep))
+bagging.cv(formula, data, v = 10, mfinal = 100, control)
 }
 %- maybe also 'usage' for other objects documented here.
 
@@ -24,12 +23,7 @@ bagging.cv(formula, data, v = 10, mfinal = 100, minsplit = 5,
 	that roughly every v-th observation is left out.}
   \item{mfinal}{an integer, the number of iterations for which boosting is run 
 	or the number of trees to use. Defaults to \code{mfinal=100} iterations.}
-  \item{minsplit}{the minimum number of observations that must exist in a node in order for a split to be attempted.}
-  \item{cp}{complexity parameter. Any split that does not decrease the overall 
-	lack of fit by a factor of \code{cp} is not attempted. }
-  \item{maxdepth}{set the maximum depth of any node of the final tree, with the root node counted as depth 0 
-	(past 30 rpart will give nonsense results on 32-bit machines).  Defaults to the number of classes.}
-
+  \item{control}{options that control details of the rpart algorithm. See rpart.control for more details.  }
 }
 
 \value{
@@ -62,7 +56,7 @@ bagging.cv(formula, data, v = 10, mfinal = 100, minsplit = 5,
 library(rpart)
 data(iris)
 names(iris)<-c("LS","AS","LP","AP","Especies")
-iris.baggingcv <- bagging.cv(Especies ~ ., v=10, data=iris, mfinal=10,maxdepth=3)
+iris.baggingcv <- bagging.cv(Especies ~ ., v=10, data=iris, mfinal=10,control=rpart.control(maxdepth=3))
 
 data(kyphosis)
 kyphosis.baggingcv <- bagging.cv(Kyphosis ~ Age + Number + Start, 
@@ -73,7 +67,7 @@ kyphosis.baggingcv <- bagging.cv(Kyphosis ~ Age + Number + Start,
 library(rpart)
 library(mlbench)
 data(Vehicle)
-Vehicle.bagging.cv <- bagging.cv(Class ~.,data=Vehicle,mfinal=25, maxdepth=5)
+Vehicle.bagging.cv <- bagging.cv(Class ~.,data=Vehicle,mfinal=25, control=rpart.control(maxdepth=5))
 Vehicle.bagging.cv[-1]
 
 }

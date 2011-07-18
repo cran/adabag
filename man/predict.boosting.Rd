@@ -2,7 +2,7 @@
 \alias{predict.boosting}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Predicts from a fitted Adaboost.M1 object.  }
+\title{ Predicts from a fitted Adaboost.M1 object }
 
 
 
@@ -32,14 +32,16 @@
 \value{
 	An object of class predict.boosting, which is a list with the following components:
 
-  \item{class }{the class predicted by the ensemble classifier.}
+  \item{formula}{the formula used.  }
+  \item{votes}{a matrix describing, for each observation, the number of trees that assigned it to each class, weighting each tree by its \code{alpha} coefficient.  }
+  \item{class}{the class predicted by the ensemble classifier.  }
   \item{confusion }{the confusion matrix which compares the real class with the predicted one.}
   \item{error }{returns the average error.}
 }
 
 \references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
 
-	Freund, Y. and Schapire, R.E. (1996): "Experiments with a New Boosting Algorithm". En Proceedings of the Thirteenth International Conference on Machine Learning, pp. 148--156, Morgan Kaufmann. 
+	Freund, Y. and Schapire, R.E. (1996): "Experiments with a new boosting algorithm". En Proceedings of the Thirteenth International Conference on Machine Learning, pp. 148--156, Morgan Kaufmann. 
 	
 	Breiman, L. (1998): "Arcing classifiers". The Annals of Statistics, Vol 26, 3, pp. 801--849. }
 
@@ -77,9 +79,11 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-BC.adaboost <- adaboost.M1(Class ~.,data=BreastCancer[,-1],mfinal=25, maxdepth=3)
+BC.adaboost <- adaboost.M1(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=rpart.control(maxdepth=3))
 BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1])
-BC.adaboost.pred[-1]
+BC.adaboost.pred$confusion
+BC.adaboost.pred$error
+
 
 ## Data Vehicle (four classes) 
 library(rpart)
@@ -98,10 +102,10 @@ tb
 error.rpart
 
 Vehicle.adaboost <- adaboost.M1(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, 
-	maxdepth=maxdepth)
+	control=rpart.control(maxdepth=maxdepth))
 Vehicle.adaboost.pred <- predict.boosting(Vehicle.adaboost,newdata=Vehicle[-sub, ])
-Vehicle.adaboost.pred[-1]
-
+Vehicle.adaboost.pred$confusion
+Vehicle.adaboost.pred$error
 
 }
 
