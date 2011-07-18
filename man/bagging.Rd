@@ -1,15 +1,14 @@
 \name{bagging}
 \alias{bagging}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Applies the Bagging algorithm to a data set. }
+\title{ Applies the Bagging algorithm to a data set }
 
 \description{
 	Fits the Bagging algorithm proposed by Breiman 
 	in 1996 using classification trees as single classifiers.
 }
 \usage{
-bagging(formula, data, mfinal = 100, minsplit = 5, cp = 0.01, 
-	maxdepth = nlevels(vardep))
+bagging(formula, data, mfinal = 100, control)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,12 +17,7 @@ bagging(formula, data, mfinal = 100, minsplit = 5, cp = 0.01,
   \item{data}{a data frame in which to interpret the variables named in the \code{formula} }
   \item{mfinal}{an integer, the number of iterations for which boosting is run 
 	or the number of trees to use. Defaults to \code{mfinal=100} iterations.}
-  \item{minsplit}{the minimum number of observations that must exist in a node, in order for a split to be attempted.}
-  \item{cp}{complexity parameter. Any split that does not decrease the overall 
-	lack of fit by a factor of \code{cp} is not attempted. }
-  \item{maxdepth}{set the maximum depth of any node of the final tree, with the root node counted as depth 0 
-	(past 30 rpart will give nonsense results on 32-bit machines).  Defaults to the number of classes.}
-
+  \item{control}{options that control details of the rpart algorithm. See rpart.control for more details.  }
 }
 \details{
   Unlike boosting, individual classifiers are independent among them in bagging
@@ -68,9 +62,10 @@ library(mlbench)
 data(BreastCancer)
 l <- length(BreastCancer[,1])
 sub <- sample(1:l,2*l/3)
-BC.bagging <- bagging(Class ~.,data=BreastCancer[,-1],mfinal=25, maxdepth=3)
+BC.bagging <- bagging(Class ~.,data=BreastCancer[,-1],mfinal=25, control=rpart.control(maxdepth=3))
 BC.bagging.pred <- predict.bagging(BC.bagging,newdata=BreastCancer[-sub,-1])
-BC.bagging.pred[-1]
+BC.bagging.pred$confusion
+BC.bagging.pred$error
 
 # Data Vehicle (four classes)
 library(rpart)
@@ -78,9 +73,10 @@ library(mlbench)
 data(Vehicle)
 l <- length(Vehicle[,1])
 sub <- sample(1:l,2*l/3)
-Vehicle.bagging <- bagging(Class ~.,data=Vehicle[sub, ],mfinal=50, maxdepth=5)
+Vehicle.bagging <- bagging(Class ~.,data=Vehicle[sub, ],mfinal=50, control=rpart.control(maxdepth=5))
 Vehicle.bagging.pred <- predict.bagging(Vehicle.bagging,newdata=Vehicle[-sub, ])
-Vehicle.bagging.pred[-1]
+Vehicle.bagging.pred$confusion
+Vehicle.bagging.pred$error
 
 }
 

@@ -2,7 +2,7 @@
 \alias{predict.bagging}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Predicts from a fitted bagging object.}
+\title{Predicts from a fitted Bagging object}
 
 \description{
   Classifies a dataframe using a fitted bagging object.
@@ -26,6 +26,8 @@
 \value{
    An object of class \code{predict.bagging}, which is a list with the following components:
 
+  \item{formula }{the formula used.}
+  \item{votes }{a matrix describing, for each observation, the number of trees that assigned it to each class.}
   \item{class }{the class predicted by the ensemble classifier.}
   \item{confusion }{the confusion matrix which compares the real class with the predicted one.}
   \item{error }{returns the average error.}
@@ -60,9 +62,10 @@ library(mlbench)
 data(BreastCancer)
 l <- length(BreastCancer[,1])
 sub <- sample(1:l,2*l/3)
-BC.bagging <- bagging(Class ~.,data=BreastCancer[,-1],mfinal=25, maxdepth=3)
+BC.bagging <- bagging(Class ~.,data=BreastCancer[,-1],mfinal=25, control=rpart.control(maxdepth=3))
 BC.bagging.pred <- predict.bagging(BC.bagging,newdata=BreastCancer[-sub,-1])
-BC.bagging.pred[-1]
+BC.bagging.pred$confusion
+BC.bagging.pred$error
 
 # Data Vehicle (four classes)
 library(rpart)
@@ -70,9 +73,10 @@ library(mlbench)
 data(Vehicle)
 l <- length(Vehicle[,1])
 sub <- sample(1:l,2*l/3)
-Vehicle.bagging <- bagging(Class ~.,data=Vehicle[sub, ],mfinal=50, maxdepth=5)
+Vehicle.bagging <- bagging(Class ~.,data=Vehicle[sub, ],mfinal=50, control=rpart.control(minsplit=15))
 Vehicle.bagging.pred <- predict.bagging(Vehicle.bagging,newdata=Vehicle[-sub, ])
-Vehicle.bagging.pred[-1]
+Vehicle.bagging.pred$confusion
+Vehicle.bagging.pred$error
 
 }
 
