@@ -26,7 +26,8 @@ boostrap<- sample(1:n,replace=TRUE,prob=pesos)
 fit <- rpart(formula,data=data[boostrap,-1], control=control)
         flearn <- predict(fit,newdata=data[,-1],type="class")
 ind<-as.numeric(vardep != flearn) #crear un vector indicador
-err<- sum(ind)/n                       #calcula el error en esa iteraci<f3>n
+#err<- sum(ind)/n                       #calcula el error en esa iteracion
+err<- sum(pesos*ind)         #Calcula el error ponderado en esa iteracion
 }
 
 #<bf>limitamos el tama<f1>o del arbol para que sean distintos?
@@ -36,7 +37,7 @@ if (boos==FALSE) {
 
         flearn <- predict(fit,data=data[,-1], type="class")
 ind<-as.numeric(vardep != flearn) #Crear un vector indicador
-err<- sum(pesos*ind)         #Calcula el error ponderado en esa iteraci<f3>n
+err<- sum(pesos*ind)         #Calcula el error ponderado en esa iteracion
 
 
 }

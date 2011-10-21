@@ -1,0 +1,17 @@
+3a01ebe2a0c4dd3f2ee7859163422593 *DESCRIPTION
+cc09677e2a1658e22cbdb6e3fc182bde *R/adabag-internal.R
+058083ed4a9cb2a02817ec9c618a016d *R/adaboost.M1.R
+bebd0a95034bf1f3dc0791d66ee9df66 *R/bagging.R
+862bba33eee070e3bca1a1fe46277cf3 *R/bagging.cv.R
+f0048788a54404d1a519f4399c451c8d *R/boosting.cv.R
+104ce77319f84b44b792bf22cf3c629c *R/margins.R
+728832545be4006d10fddef0f45dcaad *R/predict.bagging.R
+1661f6299761ccc0d4ac67bae732ebbb *R/predict.boosting.R
+83d8f7306c0dad75d2dbaea153437e80 *man/adabag-package.Rd
+b4ca5ab06e7092197b6ed143ee50338e *man/adaboost.M1.Rd
+f978d71851f8021eebbcf8d182277e30 *man/bagging.Rd
+c6b408eb8c47497ba7ebe404a1d8c375 *man/bagging.cv.Rd
+2a0f87402e1ffecac52eb57f42c1237f *man/boosting.cv.Rd
+c2f6f2dfa65e67cbf7cc850f0741daff *man/margins.Rd
+587785f4f625e25c4e956c3bf238543d *man/predict.bagging.Rd
+c74bff6b67519a3f4f9f59f9b57405a7 *man/predict.boosting.Rd
