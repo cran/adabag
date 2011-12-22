@@ -2,27 +2,31 @@
 \alias{predict.boosting}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Predicts from a fitted Adaboost.M1 object }
+\title{ Predicts from a fitted boosting object }
 
 
 
 \description{
-  Classifies a dataframe using a fitted adaboost.M1 object.
+  Classifies a dataframe using a fitted boosting object.
 
 }
 \usage{
-\method{predict}{boosting}(object, newdata, ...)
+\method{predict}{boosting}(object, newdata, newmfinal=length(object$trees), ...)
 
 }
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{object}{fitted model object of class \code{adaboost.M1}. This is assumed to be the result
+  \item{object}{fitted model object of class \code{boosting}. This is assumed to be the result
 	 of some function that produces an object with the same named components as that 
-	returned by the \code{adaboost.M1} function. }
+	returned by the \code{boosting} function. }
 
   \item{newdata}{data frame containing the values at which predictions are required. The predictors referred 
 	to in the right side of \code{formula(object)} must be present by name in newdata.}
+
+  \item{newmfinal}{The number of trees of the boosting object to be used in the prediction.
+	This argument allows the user to prune the ensemble. By default all the trees 
+	in \code{object} are used }
 
   \item{...}{ further arguments passed to or from other methods.}
 }
@@ -34,6 +38,8 @@
 
   \item{formula}{the formula used.  }
   \item{votes}{a matrix describing, for each observation, the number of trees that assigned it to each class, weighting each tree by its \code{alpha} coefficient.  }
+  \item{prob }{a matrix describing, for each observation, the posterior probability of each class. 
+	These probabilities are calculated using the proportion of votes in the final ensemble.}
   \item{class}{the class predicted by the ensemble classifier.  }
   \item{confusion }{the confusion matrix which compares the real class with the predicted one.}
   \item{error }{returns the average error.}
@@ -41,18 +47,24 @@
 
 \references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
 
+	Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
+
+	Breiman, L. (1998): "Arcing classifiers". The Annals of Statistics, Vol 26, 3, pp. 801--849. 
+
 	Freund, Y. and Schapire, R.E. (1996): "Experiments with a new boosting algorithm". En Proceedings of the Thirteenth International Conference on Machine Learning, pp. 148--156, Morgan Kaufmann. 
 	
-	Breiman, L. (1998): "Arcing classifiers". The Annals of Statistics, Vol 26, 3, pp. 801--849. }
+	Zhu, J., Zou, H., Rosset, S. and Hastie, T. (2009): ``Multi-class AdaBoost''. Statistics and Its Interface, 2, pp. 349--360. 
+}
 
-\author{Esteban Alfaro Cortes \email{Esteban.Alfaro@uclm.es}, Matias Gamez Martinez \email{Matias.Gamez@uclm.es} and Noelia Garcia Rubio \email{Noelia.Garcia@uclm.es} }
+
+\author{Esteban Alfaro-Cortes \email{Esteban.Alfaro@uclm.es}, Matias Gamez-Martinez \email{Matias.Gamez@uclm.es} and Noelia Garcia-Rubio \email{Noelia.Garcia@uclm.es} }
 
 
 % ~Make other sections like Warning with \section{Warning }{....} ~
 
 
 \seealso{ 
-	\code{\link{adaboost.M1}},
+	\code{\link{boosting}},
 	\code{\link{boosting.cv}} }
 
 \examples{
@@ -61,8 +73,9 @@ library(rpart)
 data(iris)
 names(iris)<-c("LS","AS","LP","AP","Especies")
 sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
-iris.adaboost <- adaboost.M1(Especies ~ ., data=iris[sub,], mfinal=10)
+iris.adaboost <- boosting(Especies ~ ., data=iris[sub,], mfinal=10)
 iris.predboosting<- predict.boosting(iris.adaboost, newdata=iris[-sub,])
+iris.predboosting$prob
 
 ## rpart and mlbench libraries should be loaded
 ## Comparing the test error of rpart and adaboost.M1
@@ -79,8 +92,10 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-BC.adaboost <- adaboost.M1(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=rpart.control(maxdepth=3))
-BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1])
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=rpart.control(maxdepth=3))
+
+#Using the pruning option
+BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1], newmfinal=15)
 BC.adaboost.pred$confusion
 BC.adaboost.pred$error
 
@@ -101,7 +116,7 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-Vehicle.adaboost <- adaboost.M1(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, 
+Vehicle.adaboost <- boosting(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, coeflearn="Zhu",
 	control=rpart.control(maxdepth=maxdepth))
 Vehicle.adaboost.pred <- predict.boosting(Vehicle.adaboost,newdata=Vehicle[-sub, ])
 Vehicle.adaboost.pred$confusion

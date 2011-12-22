@@ -29,6 +29,8 @@ bagging(formula, data, mfinal = 100, control)
   \item{formula }{the formula used.}
   \item{trees }{the trees grown along the iterations.}
   \item{votes }{a matrix describing, for each observation, the number of trees that assigned it to each class.}
+  \item{prob }{a matrix describing, for each observation, the posterior probability of each class. 
+	These probabilities are calculated using the proportion of votes in the final ensemble.}
   \item{class }{the class predicted by the ensemble classifier.}
   \item{samples }{ the bootstrap samples used along the iterations.}
   \item{importance }{returns the relative importance of each variable in the classification task.
@@ -37,11 +39,13 @@ bagging(formula, data, mfinal = 100, control)
 }
 \references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
 
+	Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
+
 	Breiman, L. (1996): "Bagging predictors". Machine Learning, Vol 24, 2, pp.123--140.
 
 	Breiman, L. (1998). "Arcing classifiers". The Annals of Statistics, Vol 26, 3, pp. 801--849. }
 
-\author{Esteban Alfaro Cortes \email{Esteban.Alfaro@uclm.es}, Matias Gamez Martinez \email{Matias.Gamez@uclm.es} and Noelia Garcia Rubio \email{Noelia.Garcia@uclm.es} }
+\author{Esteban Alfaro-Cortes \email{Esteban.Alfaro@uclm.es}, Matias Gamez-Martinez \email{Matias.Gamez@uclm.es} and Noelia Garcia-Rubio \email{Noelia.Garcia@uclm.es} }
 
 
 
