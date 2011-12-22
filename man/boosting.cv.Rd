@@ -1,10 +1,10 @@
 \name{boosting.cv}
 \alias{boosting.cv}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Runs v-fold cross validation with Adaboost.M1 }
+\title{ Runs v-fold cross validation with AdaBoost.M1 or SAMME}
 
 \description{
-	The data are divided into \code{v} non-overlapping subsets of roughly equal size. Then, \code{adaboost.M1}
+	The data are divided into \code{v} non-overlapping subsets of roughly equal size. Then, \code{boosting}
 	is applied on \code{(v-1)} of the subsets. Finally, predictions are made for the left out subsets,
 	and the process is repeated for each of the \code{v} subsets.
 }
@@ -27,8 +27,10 @@ boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100,
 	that roughly every v-th observation is left out.}
   \item{mfinal}{an integer, the number of iterations for which boosting is run 
 	or the number of trees to use. Defaults to \code{mfinal=100} iterations.}
-  \item{coeflearn}{ if "Breiman"(by default), \code{alpha=1/2ln((1-err)/err)} is used. 
-	If "Freund" \code{alpha=ln((1-err)/err)} is used. Where \code{alpha} is the weight updating coefficient. }
+  \item{coeflearn}{ if 'Breiman'(by default), \code{alpha=1/2ln((1-err)/err)} is used. 
+   If 'Freund' \code{alpha=ln((1-err)/err)} is used. In both cases the AdaBoost.M1 algorithm is used
+   and \code{alpha} is the weight updating coefficient. On the other hand, if coeflearn is 'Zhu' the SAMME algorithm 
+   is implemented with \code{alpha=ln((1-err)/err)+ln(nclasses-1)}}
   \item{control}{options that control details of the rpart algorithm. See rpart.control for more details.  }
 }
 
@@ -42,17 +44,23 @@ boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100,
 
 \references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
 
+	Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
+
+	Breiman, L. (1998): "Arcing classifiers". The Annals of Statistics, Vol 26, 3, pp. 801--849. 
+
 	Freund, Y. and Schapire, R.E. (1996): "Experiments with a new boosting algorithm". In Proceedings of the Thirteenth International Conference on Machine Learning, pp. 148--156, Morgan Kaufmann. 
 
-	Breiman, L. (1998): "Arcing classifiers". The Annals of Statistics, Vol 26, 3, pp. 801--849. }
+	Zhu, J., Zou, H., Rosset, S. and Hastie, T. (2009): ``Multi-class AdaBoost''. Statistics and Its Interface, 2, pp. 349--360. 
+}
 
-\author{Esteban Alfaro Cortes \email{Esteban.Alfaro@uclm.es}, Matias Gamez Martinez \email{Matias.Gamez@uclm.es} and Noelia Garcia Rubio \email{Noelia.Garcia@uclm.es} }
+
+\author{Esteban Alfaro-Cortes \email{Esteban.Alfaro@uclm.es}, Matias Gamez-Martinez \email{Matias.Gamez@uclm.es} and Noelia Garcia-Rubio \email{Noelia.Garcia@uclm.es} }
 
 
 % ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{ 
-	\code{\link{adaboost.M1}},
+	\code{\link{boosting}},
 	\code{\link{predict.boosting}} }
 
 
@@ -66,7 +74,7 @@ iris.boostcv[-1]
 
 
 data(kyphosis)
-kyphosis.boostcv <- boosting.cv(Kyphosis ~ Age + Number + Start, data=kyphosis, 
+kyphosis.boostcv <- boosting.cv(Kyphosis ~ Age + Number + Start, data=kyphosis, v=5,
 	mfinal=15)
 kyphosis.boostcv[-1]
 
@@ -75,7 +83,7 @@ kyphosis.boostcv[-1]
 library(rpart)
 library(mlbench)
 data(Vehicle)
-Vehicle.boost.cv <- boosting.cv(Class ~.,data=Vehicle,mfinal=25, control=rpart.control(maxdepth=5))
+Vehicle.boost.cv <- boosting.cv(Class ~.,data=Vehicle,v=5, mfinal=20, coeflearn="Zhu", control=rpart.control(maxdepth=5))
 Vehicle.boost.cv[-1]
 
 }

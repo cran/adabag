@@ -12,7 +12,7 @@ predclass <- rep("O",n)
     for (i in 1:v) {
         test <- v * (0:floor(n/v)) + i
         test <- test[test < n + 1]
-        fit <- adaboost.M1(formula, data[-test,],boos ,mfinal,coeflearn,control=control)
+        fit <- boosting(formula, data[-test,],boos ,mfinal,coeflearn,control=control)
 fit.predict<-predict.boosting(fit, data[test,])
         predclass[test] <- fit.predict$class
 cat("i: ", c(i, date()), "\n")

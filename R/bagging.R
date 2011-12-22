@@ -49,7 +49,11 @@ predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRU
 
 #normalizar la importancia de las variables
 acum<-acum[-1]/sum(acum[-1])*100
-ans<- list(formula=formula,trees=arboles,votes=classfinal,class=predclass, samples=replicas, importance=acum)
+
+#Para que devuelva las probabilidades a posteriori
+classfinal/apply(classfinal,1,sum)->votosporc
+
+ans<- list(formula=formula,trees=arboles,votes=classfinal,prob=votosporc,class=predclass, samples=replicas, importance=acum)
 class(ans) <- "bagging"
 ans
 
