@@ -2,7 +2,7 @@
 \alias{predict.bagging}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Predicts from a fitted Bagging object}
+\title{Predicts from a fitted bagging object}
 
 \description{
   Classifies a dataframe using a fitted bagging object.
@@ -33,7 +33,7 @@ newmfinal=length(object$trees)
 
   \item{formula }{the formula used.}
   \item{votes }{a matrix describing, for each observation, the number of trees that assigned it to each class.}
-  \item{prob }{a matrix describing, for each observation, the posterior probability of each class. 
+  \item{prob }{a matrix describing, for each observation, the posterior probability or degree of support of each class. 
 	These probabilities are calculated using the proportion of votes in the final ensemble.}
   \item{class }{the class predicted by the ensemble classifier.}
   \item{confusion }{the confusion matrix which compares the real class with the predicted one.}
@@ -60,9 +60,8 @@ newmfinal=length(object$trees)
 \examples{
 library(rpart)
 data(iris)
-names(iris)<-c("LS","AS","LP","AP","Especies")
 sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
-iris.bagging <- bagging(Especies ~ ., data=iris[sub,], mfinal=10)
+iris.bagging <- bagging(Species ~ ., data=iris[sub,], mfinal=10)
 iris.predbagging<- predict.bagging(iris.bagging, newdata=iris[-sub,])
 iris.predbagging
 

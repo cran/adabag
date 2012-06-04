@@ -75,39 +75,8 @@ xlab="Iterations", ylab="Error", col = "red")
 lines(evol.train$error, cex = .5 ,col="blue", lty=2)
 legend("topright", c("test","train"), col = c("red", "blue"), lty=1:2)
 
-
-data(BreastCancer)
-l <- length(BreastCancer[,1])
-sub <- sample(1:l,2*l/3)
-cntrl <- rpart.control(maxdepth = 3, minsplit = 0,  cp = -1)
-
-BC.bagging <- bagging(Class ~.,data=BreastCancer[sub,-1],mfinal=75, control=cntrl)
-
-errorevol(BC.bagging,newdata=BreastCancer[sub,-1])->evol.train
-errorevol(BC.bagging,newdata=BreastCancer[-sub,-1])->evol.test
-
-par(mfrow = c(1, 2))
-plot(evol.train$error, type="l", main="Bagging training error Vs number of trees",  
-xlab="Iterations", ylab="Error", ylim=c(0,0.5), col = "blue") 
-plot(evol.test$error, type="l", main="Bagging test error Vs number of trees",  
-xlab="Iterations", ylab="Error", ylim=c(0,0.5), col = "red") 
-
-
-data(Vehicle)
-l <- length(Vehicle[,1])
-sub <- sample(1:l,2*l/3)
-
-Vehicle.adaboost <- boosting(Class ~.,data=Vehicle[sub, ],mfinal=100, coeflearn="Zhu",
-	control=rpart.control(maxdepth=5))
-
-errorevol(Vehicle.adaboost,newdata=Vehicle[sub, ])->evol.train
-errorevol(Vehicle.adaboost,newdata=Vehicle[-sub, ])->evol.test
-
-#comparing error evolution in training and test set
-plot(evol.test$error, type="l",   main="Adaboost error Vs number of trees",  
-xlab="Iterations", ylab="Error", col = "red") 
-lines(evol.train$error, cex = .5 ,col="blue", lty=2)
-legend("topright", c("test","train"), col = c("red", "blue"), lty=1:2)
+# See the help of the functions margins and boosting 
+# for more examples of the use of the error evolution
 
 
 }

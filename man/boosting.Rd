@@ -40,11 +40,11 @@
   \item{trees}{the trees grown along the iterations.  }
   \item{weights}{a vector with the weighting of the trees of all iterations.  }
   \item{votes}{a matrix describing, for each observation, the number of trees that assigned it to each class, weighting each tree by its \code{alpha} coefficient.  }
-  \item{prob}{a matrix describing, for each observation, the posterior probability of each class. 
+  \item{prob}{a matrix describing, for each observation, the posterior probability or degree of support of each class. 
 	These probabilities are calculated using the proportion of votes in the final ensemble.}
   \item{class}{the class predicted by the ensemble classifier.  }
   \item{importance}{returns the relative importance of each variable in the classification task.
-   This measure is the number of times each variable is selected to split.  }
+   This measure takes into account the gain of the Gini index given by a variable in a tree and the weight of this tree.  }
 }
 
 \references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
@@ -69,16 +69,11 @@
 \examples{
 
 ## rpart library should be loaded
-library(rpart)
 data(iris)
-names(iris)<-c("LS","AS","LP","AP","Especies")
-iris.adaboost <- boosting(Especies~LS +AS +LP+ AP, data=iris, boos=TRUE, 
-	mfinal=10)
+iris.adaboost <- boosting(Species~., data=iris, boos=TRUE, mfinal=10)
 
-## rpart and mlbench libraries should be loaded
+
 ## Comparing the test error of rpart and adaboost.M1
-library(rpart)
-library(mlbench)
 data(BreastCancer)
 l <- length(BreastCancer[,1])
 sub <- sample(1:l,2*l/3)
@@ -97,12 +92,10 @@ BC.adaboost.pred$error
 
 
 ## Data Vehicle (four classes) 
-library(rpart)
-library(mlbench)
 data(Vehicle)
 l <- length(Vehicle[,1])
 sub <- sample(1:l,2*l/3)
-mfinal <- 25
+mfinal <- 50
 maxdepth <- 5
 
 Vehicle.rpart <- rpart(Class~.,data=Vehicle[sub,],maxdepth=maxdepth)
@@ -117,6 +110,16 @@ Vehicle.adaboost <- boosting(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, coeflea
 Vehicle.adaboost.pred <- predict.boosting(Vehicle.adaboost,newdata=Vehicle[-sub, ])
 Vehicle.adaboost.pred$confusion
 Vehicle.adaboost.pred$error
+
+
+errorevol(Vehicle.adaboost,newdata=Vehicle[sub, ])->evol.train
+errorevol(Vehicle.adaboost,newdata=Vehicle[-sub, ])->evol.test
+
+#comparing error evolution in training and test set
+plot(evol.test$error, type="l",   main="AdaBoost error Vs number of trees",  
+xlab="Iterations", ylab="Error", col = "red") 
+lines(evol.train$error, cex = .5 ,col="blue", lty=2)
+legend("topright", c("test","train"), col = c("red", "blue"), lty=1:2)
 
 
 }

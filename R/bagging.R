@@ -31,10 +31,21 @@ acum<-acum+acum1
 }
 
 pred<- data.frame(rep(0,n)) 
-# Crea un dataframe para guardar las pred, al 1<ba> est<e1> vac<ed>o, pero luego se va a<f1>adiendo
+# Crea un dataframe para guardar las pred, al inicio esta vacio, pero luego se va agnadiendo
+
+	#2012-05-16 nueva medida de importancia
+	nvar<-dim(varImp(arboles[[1]], surrogates = FALSE, competes = FALSE))[1]
+	imp<- array(0, c(mfinal,nvar))  #Creo una matriz para guardar el "improve" de cada variable conforme evoluciona boosting
+
+
+
 for (m in 1:mfinal) {
 if(m==1){pred <- predict(arboles[[m]],data,type="class")} 
 else{pred <- data.frame(pred,predict(arboles[[m]],data,type="class"))} 
+
+		k <- varImp(arboles[[m]], surrogates = FALSE, competes = FALSE)
+		imp[m,] <-k[sort(row.names(k)), ]
+
 }
 
 classfinal <- array(0, c(n,nlevels(vardep)))
@@ -50,10 +61,19 @@ predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRU
 #normalizar la importancia de las variables
 acum<-acum[-1]/sum(acum[-1])*100
 
+	pond<-rep(1,mfinal)
+	imppond<-as.vector(as.vector(pond)%*%imp)
+	imppond<-imppond/sum(imppond)*100
+	names(imppond)<-sort(names(acum))
+
+
+
 #Para que devuelva las probabilidades a posteriori
 classfinal/apply(classfinal,1,sum)->votosporc
 
-ans<- list(formula=formula,trees=arboles,votes=classfinal,prob=votosporc,class=predclass, samples=replicas, importance=acum)
+
+ans<- list(formula=formula,trees=arboles,votes=classfinal,prob=votosporc,class=predclass, samples=replicas, importance=imppond)
+
 class(ans) <- "bagging"
 ans
 

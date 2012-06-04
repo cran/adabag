@@ -29,12 +29,12 @@ bagging(formula, data, mfinal = 100, control)
   \item{formula }{the formula used.}
   \item{trees }{the trees grown along the iterations.}
   \item{votes }{a matrix describing, for each observation, the number of trees that assigned it to each class.}
-  \item{prob }{a matrix describing, for each observation, the posterior probability of each class. 
+  \item{prob }{a matrix describing, for each observation, the posterior probability or degree of support of each class. 
 	These probabilities are calculated using the proportion of votes in the final ensemble.}
   \item{class }{the class predicted by the ensemble classifier.}
   \item{samples }{ the bootstrap samples used along the iterations.}
   \item{importance }{returns the relative importance of each variable in the classification task.
-	This measure is the number of times each variable is selected to split.}
+   This measure takes into account the gain of the Gini index given by a variable in each tree.}
 
 }
 \references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
@@ -57,8 +57,7 @@ bagging(formula, data, mfinal = 100, control)
 ## rpart library should be loaded
 library(rpart)
 data(iris)
-names(iris)<-c("LS","AS","LP","AP","Especies")
-lirios.bagging <- bagging(Especies~LS +AS +LP+ AP, data=iris, mfinal=10)
+iris.bagging <- bagging(Species~., data=iris, mfinal=10)
 
 ## rpart and mlbench libraries should be loaded
 library(rpart)
