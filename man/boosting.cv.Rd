@@ -73,10 +73,6 @@ iris.boostcv <- boosting.cv(Especies ~ ., v=10, data=iris, mfinal=10, control=rp
 iris.boostcv[-1]
 
 
-data(kyphosis)
-kyphosis.boostcv <- boosting.cv(Kyphosis ~ Age + Number + Start, data=kyphosis, v=5,
-	mfinal=15)
-kyphosis.boostcv[-1]
 
 ## rpart and mlbench libraries should be loaded
 ## Data Vehicle (four classes) 

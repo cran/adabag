@@ -38,7 +38,7 @@
 
   \item{formula}{the formula used.  }
   \item{votes}{a matrix describing, for each observation, the number of trees that assigned it to each class, weighting each tree by its \code{alpha} coefficient.  }
-  \item{prob }{a matrix describing, for each observation, the posterior probability of each class. 
+  \item{prob }{a matrix describing, for each observation, the posterior probability or degree of support of each class. 
 	These probabilities are calculated using the proportion of votes in the final ensemble.}
   \item{class}{the class predicted by the ensemble classifier.  }
   \item{confusion }{the confusion matrix which compares the real class with the predicted one.}
@@ -71,9 +71,8 @@
 ## rpart library should be loaded
 library(rpart)
 data(iris)
-names(iris)<-c("LS","AS","LP","AP","Especies")
 sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
-iris.adaboost <- boosting(Especies ~ ., data=iris[sub,], mfinal=10)
+iris.adaboost <- boosting(Species ~ ., data=iris[sub,], mfinal=10)
 iris.predboosting<- predict.boosting(iris.adaboost, newdata=iris[-sub,])
 iris.predboosting$prob
 

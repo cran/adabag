@@ -117,10 +117,21 @@ acum<-acum+acum1
 
 pred<- data.frame(rep(0,n))
 
+	#2012-05-16 nueva medida de importancia
+	nvar<-dim(varImp(arboles[[1]], surrogates = FALSE, competes = FALSE))[1]
+	imp<- array(0, c(mfinal,nvar))  #Creo una matriz para guardar el "improve" de cada variable conforme evoluciona boosting
+
+
+
 for (m in 1:mfinal) {
 if(m==1){pred <- predict(arboles[[m]],data[,-1],type="class")}
 else{pred <- data.frame(pred,predict(arboles[[m]],data[,-1],type="class"))}
+
+		k <- varImp(arboles[[m]], surrogates = FALSE, competes = FALSE)
+		imp[m,] <-k[sort(row.names(k)), ]
 }
+
+
 
 classfinal <- array(0, c(n,nlevels(vardep)))
 for (i in 1:nlevels(vardep)){
@@ -131,8 +142,17 @@ predclass <- rep("O",n)
 for(i in 1:n){
 predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])
 }
+
 #normalizar la importancia de las variables
 acum<-acum[-1]/sum(acum[-1])*100
+
+	imppond<-as.vector(as.vector(pond)%*%imp)
+	imppond<-imppond/sum(imppond)*100
+	names(imppond)<-sort(names(acum))
+
+
+
+
 
 
 #Para que devuelva las probabilidades a posteriori
@@ -140,7 +160,9 @@ classfinal/apply(classfinal,1,sum)->votosporc
 
 
 
-ans<- list(formula=formula, trees=arboles, weights=pond, votes=classfinal,prob=votosporc,class=predclass, importance=acum)
+
+ans<- list(formula=formula, trees=arboles, weights=pond, votes=classfinal,prob=votosporc,class=predclass, importance=imppond)
+
 class(ans)<-"boosting"
 ans
 }

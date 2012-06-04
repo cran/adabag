@@ -57,12 +57,9 @@ bagging.cv(formula, data, v = 10, mfinal = 100, control)
 ## rpart library should be loaded
 library(rpart)
 data(iris)
-names(iris)<-c("LS","AS","LP","AP","Especies")
-iris.baggingcv <- bagging.cv(Especies ~ ., v=10, data=iris, mfinal=10,control=rpart.control(maxdepth=3))
+iris.baggingcv <- bagging.cv(Species ~ ., v=10, data=iris, mfinal=10,control=rpart.control(maxdepth=3))
 
-data(kyphosis)
-kyphosis.baggingcv <- bagging.cv(Kyphosis ~ Age + Number + Start, v=5,
-	data=kyphosis, mfinal=15)
+
 
 ## rpart and mlbench libraries should be loaded
 ## Data Vehicle (four classes) 

@@ -3,9 +3,9 @@ function ( formula, data,v=10,boos=TRUE ,mfinal=100, coeflearn="Breiman", contro
 {
 vardep<-data[,as.character(formula[[2]])]
 n <- length(vardep)
-#para validaci<f3>n cruzada 2<v<n
-if(v>n) stop(" el valor de v no es adecuado")
-if(v<2) stop(" el valor de v no es adecuado")
+#para validacion cruzada 2<v<n
+if(v>n) stop(" v should be in [2, n]")
+if(v<2) stop(" v should be in [2, n]")
 
 predclass <- rep("O",n)
 
@@ -18,7 +18,7 @@ fit.predict<-predict.boosting(fit, data[test,])
 cat("i: ", c(i, date()), "\n")
     }
 
-   # para que devuelva la matriz de confusi<f3>n
+   # para que devuelva la matriz de confusion
 tabla <- table(predclass, vardep, dnn=c("Predicted Class", "Observed Class")) 
 
 # Para que devuelva el error en newdata

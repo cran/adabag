@@ -3,9 +3,9 @@ function ( formula, data,v=10, mfinal=100,control)
 {
 vardep<-data[,as.character(formula[[2]])]
 n <- length(vardep)
-#para validaci<f3>n cruzada 2<v<n
-if(v>n) stop(" el valor de v no es adecuado")
-if(v<2) stop(" el valor de v no es adecuado")
+#para validacion cruzada 2<v<n
+if(v>n) stop(" v should be in [2, n]")
+if(v<2) stop(" v should be in [2, n]")
 
 predclass <- rep("O",n)
 #	con<-control #prueba
@@ -20,8 +20,8 @@ predclass <- rep("O",n)
         predclass[test] <- fit.predict$class
     }
 
-   # para que devuelva la matriz de confusi<f3>n
-tabla <- table(predclass, vardep, dnn=c("Clase estimada", "Clase real")) 
+   # para que devuelva la matriz de confusion
+tabla <- table(predclass, vardep, dnn=c("Predicted Class", "Observed Class")) 
 
 # Para que devuelva el error en newdata
 error<- 1- sum(predclass== vardep)/n

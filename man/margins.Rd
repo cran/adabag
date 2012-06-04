@@ -52,9 +52,8 @@ the support of the correct class and the maximum support of an incorrect class}
 #Iris example
 library(rpart)
 data(iris)
-names(iris)<-c("LS","AS","LP","AP","Especies")
 sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
-iris.adaboost <- boosting(Especies ~ ., data=iris[sub,], mfinal=10)
+iris.adaboost <- boosting(Species ~ ., data=iris[sub,], mfinal=10)
 margins(iris.adaboost,iris[sub,])->iris.margins # training set
 
 # test set
@@ -63,7 +62,7 @@ margins(iris.predboosting,iris[-sub,])->iris.predmargins
 
 
 #Examples with bagging
-iris.bagging <- bagging(Especies ~ ., data=iris[sub,], mfinal=10)
+iris.bagging <- bagging(Species ~ ., data=iris[sub,], mfinal=10)
 margins(iris.bagging,iris[sub,])->iris.baggging.margins # training set
 
 
@@ -79,31 +78,34 @@ margins(iris.predbagging,iris[-sub,])->iris.baggging.predmargins # test set
 # Example of a graph using the margins
 par(bg="lightyellow")
 
-# 1 Rotulos en castellano, con disculpas por la falta de acentos por el codigo
-plot(sort(iris.margins[[1]]), (1:length(iris.margins[[1]]))/length(iris.margins[[1]]),
-type="l", xlim=c(-1,1),main="Grafico de la distribucion de los margenes", xlab="m", 
-ylab="\% conjunto entrenamiento", col="blue3")
-abline(v=0, col="red",lty=2)
-
-# 2 English headings
 plot(sort(iris.margins[[1]]), (1:length(iris.margins[[1]]))/length(iris.margins[[1]]), 
 type="l", xlim=c(-1,1),main="Margin cumulative distribution graph", xlab="m", 
 ylab="\% training set", col="blue3")
 abline(v=0, col="red",lty=2)
 
 
-## rpart and mlbench libraries should be loaded
-library(rpart)
-library(mlbench)
 data(BreastCancer)
 l <- length(BreastCancer[,1])
 sub <- sample(1:l,2*l/3)
+cntrl <- rpart.control(maxdepth = 3, minsplit = 0,  cp = -1)
 
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=rpart.control(maxdepth=3))
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=cntrl)
 BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1])
 
 BC.margins<-margins(BC.adaboost,BreastCancer[sub,-1]) # training set
 BC.predmargins<-margins(BC.adaboost.pred,BreastCancer[-sub,-1]) # test set
+
+#An example of Error evolution
+BC.bagging <- bagging(Class ~.,data=BreastCancer[sub,-1],mfinal=75, control=cntrl)
+
+errorevol(BC.bagging,newdata=BreastCancer[sub,-1])->evol.train
+errorevol(BC.bagging,newdata=BreastCancer[-sub,-1])->evol.test
+
+par(mfrow = c(1, 2))
+plot(evol.train$error, type="l", main="Bagging training error Vs number of trees",  
+xlab="Iterations", ylab="Error", ylim=c(0,0.5), col = "blue") 
+plot(evol.test$error, type="l", main="Bagging test error Vs number of trees",  
+xlab="Iterations", ylab="Error", ylim=c(0,0.5), col = "red") 
 
 
 }
