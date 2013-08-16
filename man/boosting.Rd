@@ -23,7 +23,7 @@
   \item{coeflearn}{ if 'Breiman'(by default), \code{alpha=1/2ln((1-err)/err)} is used. 
    If 'Freund' \code{alpha=ln((1-err)/err)} is used. In both cases the AdaBoost.M1 algorithm is used
    and \code{alpha} is the weight updating coefficient. On the other hand, if coeflearn is 'Zhu' the SAMME algorithm 
-   is implemented with \code{alpha=ln((1-err)/err)+ln(nclasses-1)}}
+   is implemented with \code{alpha=ln((1-err)/err)+} \code{ln(nclasses-1)}.}
   \item{control}{options that control details of the rpart algorithm. See rpart.control for more details.  }
 
 }
@@ -47,7 +47,7 @@
    This measure takes into account the gain of the Gini index given by a variable in a tree and the weight of this tree.  }
 }
 
-\references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
+\references{Alfaro, E., Gamez, M. and Garcia, N. (2013): ``adabag: An R Package for Classification with Boosting and Bagging''. Journal of Statistical Software, Vol 54, 2, pp. 1--35.
 
   Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
 
@@ -85,7 +85,8 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[,-1],mfinal=25, coeflearn="Freund", boos=FALSE , control=rpart.control(maxdepth=3))
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[,-1],mfinal=20, coeflearn="Freund", 
+boos=FALSE , control=rpart.control(maxdepth=3))
 BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1])
 BC.adaboost.pred$confusion
 BC.adaboost.pred$error
@@ -95,7 +96,7 @@ BC.adaboost.pred$error
 data(Vehicle)
 l <- length(Vehicle[,1])
 sub <- sample(1:l,2*l/3)
-mfinal <- 50
+mfinal <- 25
 maxdepth <- 5
 
 Vehicle.rpart <- rpart(Class~.,data=Vehicle[sub,],maxdepth=maxdepth)

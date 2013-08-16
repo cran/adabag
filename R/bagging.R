@@ -22,11 +22,6 @@ err<- sum(ind)/n                       #calcula el error en esa iteraci<f3>n
 arboles[[m]] <- fit#Guardamos los arboles
 replicas[,m]<-boostrap
 
-#para conocer la importancia de las variables
-if(m==1){summary(fit$fram[,1])->acum} 
-else{summary(fit$fram[,1])->acum1
-acum<-acum+acum1
-} 
 
 }
 
@@ -34,6 +29,7 @@ pred<- data.frame(rep(0,n))
 # Crea un dataframe para guardar las pred, al inicio esta vacio, pero luego se va agnadiendo
 
 	#2012-05-16 nueva medida de importancia
+	#sustituye a acum
 	nvar<-dim(varImp(arboles[[1]], surrogates = FALSE, competes = FALSE))[1]
 	imp<- array(0, c(mfinal,nvar))  #Creo una matriz para guardar el "improve" de cada variable conforme evoluciona boosting
 
@@ -58,14 +54,12 @@ for(i in 1:n){
 predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])
 }
 
-#normalizar la importancia de las variables
-acum<-acum[-1]/sum(acum[-1])*100
+#normalizar la importancia de las variables, las ponderaciones son todas iguales en bagging
 
 	pond<-rep(1,mfinal)
 	imppond<-as.vector(as.vector(pond)%*%imp)
 	imppond<-imppond/sum(imppond)*100
-	names(imppond)<-sort(names(acum))
-
+	names(imppond)<-sort(row.names(k))
 
 
 #Para que devuelva las probabilidades a posteriori
@@ -78,4 +72,3 @@ class(ans) <- "bagging"
 ans
 
 }
-

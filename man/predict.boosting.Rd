@@ -45,7 +45,7 @@
   \item{error }{returns the average error.}
 }
 
-\references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
+\references{Alfaro, E., Gamez, M. and Garcia, N. (2013): ``adabag: An R Package for Classification with Boosting and Bagging''. Journal of Statistical Software, Vol 54, 2, pp. 1--35.
 
 	Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
 
@@ -91,7 +91,8 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=rpart.control(maxdepth=3))
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=25, 
+	control=rpart.control(maxdepth=3))
 
 #Using the pruning option
 BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1], newmfinal=15)

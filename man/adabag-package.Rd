@@ -36,7 +36,7 @@ Maintainer: Esteban Alfaro-Cortes <Esteban.Alfaro@uclm.es>
 }
 
 \references{
-  Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
+  Alfaro, E., Gamez, M. and Garcia, N. (2013): ``adabag: An R Package for Classification with Boosting and Bagging''. Journal of Statistical Software, Vol 54, 2, pp. 1--35.
 
   Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
 
@@ -48,6 +48,11 @@ Maintainer: Esteban Alfaro-Cortes <Esteban.Alfaro@uclm.es>
 
 \subsection{Reverse cites}{To the best of our knowledge this package has been cited by:
 
+	Andriyas, S. and McKee, M. (2013). Recursive partitioning techniques for modeling irrigation behavior. 
+	Environmental Modelling & Software, 47, pp. 207--217.
+
+	Chan, J. C. W. and Paelinckx, D. (2008). Evaluation of Random Forest and Adaboost tree-based ensemble classification and spectral band selection for ecotope mapping using airborne hyperspectral imagery. 
+	Remote Sensing of Environment, 112(6), pp. 2999--3011.
 
 	Chrzanowska, M., Alfaro, E., and Witkowska, D. (2009). The individual borrowers recognition: Single and ensemble trees.
 	Expert Systems with Applications, 36(2), pp. 6409--6414.
@@ -61,11 +66,20 @@ Maintainer: Esteban Alfaro-Cortes <Esteban.Alfaro@uclm.es>
 	Fan, Y., Murphy, T.B., William, R. and Watson G. (2009). digeR: GUI tool for analyzing 2D DIGE data.
 	R package version 1.2.
 
+	Garcia-Perez-de-Lema, D., Alfaro-Cortes, E., Manzaneque-Lizano, M. and Banegas-Ochovo, R. (2012). Strategy, competitive factors and performance in small and medium enterprise (SMEs). 
+	African Journal of Business Management, 6(26), pp. 7714--7726.
+
+	Gonzalez-Rufino, E., Carrion, P., Cernadas, E., Fernandez-Delgado, M. and Dominguez-Petit, R. (2013). Exhaustive comparison of colour texture
+	features and classification methods to discriminate cells categories in histological images of fish ovary. Pattern Recognition, 46, pp. 2391--2407.
+
 	Krempl, G. and Hofer, V. (2008). Partitioner trees: combining boosting and arbitrating. 
 	In: Okun, O., Valentini, G. (eds.) Proc. 2nd Workshop Supervised and Unsupervised Ensemble Methods and Their Applications, Patras, Greece, pp. 61--66.
 
 	Maindonald, J. and Braun, J. (2010). Data Analysis and Graphics Using R - An Example-Based Approach.  
 	3rd ed, Cambridge University Press (p. 373)
+
+	Murphy, T. B., Dean, N. and Raftery, A. E. (2010). Variable selection and updating in model-based discriminant analysis for high dimensional data with food authenticity applications. 
+	The annals of applied statistics, 4(1), pp. 396--421.
 
 	Stewart, B.M. and Zhukov, Y.M. (2009). Use of force and civil-military relations in Russia: An automated content analysis. 
 	Small Wars & Insurgencies, 20(2), pp. 319--343.

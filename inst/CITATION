@@ -1,0 +1,21 @@
+citHeader("To cite adabag in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{adabag}: An {R} Package for Classification with Boosting and Bagging",
+  author       = personList(as.person("Esteban Alfaro"),
+                   as.person("Mat\\'ias G\\'amez"),
+                   as.person("Noelia Garc\\'ia")),
+  journal      = "Journal of Statistical Software",
+  year         = "2013",
+  volume       = "54",
+  number       = "2",
+  pages        = "1--35",
+  url          = "http://www.jstatsoft.org/v54/i02/",
+
+  textVersion  =
+  paste("Esteban Alfaro, Matias Gamez, Noelia Garcia (2013).",
+        "adabag: An R Package for Classification with Boosting and Bagging.",
+        "Journal of Statistical Software, 54(2), 1-35.",
+        "URL http://www.jstatsoft.org/v54/i02/.")
+)
+
