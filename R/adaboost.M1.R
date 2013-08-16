@@ -107,17 +107,13 @@ c<- log((1-eac)/eac)
 arboles[[m]] <- fit#Guardamos los arboles
 pond[m]<- c #Guardamos las ponderaciones
 
-#para conocer la importancia de las variables
-if(m==1){summary(fit$fram[,1])->acum} 
-else{summary(fit$fram[,1])->acum1
-acum<-acum+acum1
-} 
 
 }
 
 pred<- data.frame(rep(0,n))
 
 	#2012-05-16 nueva medida de importancia
+	#sustituye a acum
 	nvar<-dim(varImp(arboles[[1]], surrogates = FALSE, competes = FALSE))[1]
 	imp<- array(0, c(mfinal,nvar))  #Creo una matriz para guardar el "improve" de cada variable conforme evoluciona boosting
 
@@ -143,13 +139,10 @@ for(i in 1:n){
 predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])
 }
 
-#normalizar la importancia de las variables
-acum<-acum[-1]/sum(acum[-1])*100
-
+#normalizar la importancia de las variables teniendo en cuenta la pond de cada arbol
 	imppond<-as.vector(as.vector(pond)%*%imp)
 	imppond<-imppond/sum(imppond)*100
-	names(imppond)<-sort(names(acum))
-
+	names(imppond)<-sort(row.names(k))
 
 
 

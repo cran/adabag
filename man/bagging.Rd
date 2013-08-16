@@ -37,7 +37,7 @@ bagging(formula, data, mfinal = 100, control)
    This measure takes into account the gain of the Gini index given by a variable in each tree.}
 
 }
-\references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
+\references{Alfaro, E., Gamez, M. and Garcia, N. (2013): ``adabag: An R Package for Classification with Boosting and Bagging''. Journal of Statistical Software, Vol 54, 2, pp. 1--35.
 
 	Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
 
@@ -65,7 +65,8 @@ library(mlbench)
 data(BreastCancer)
 l <- length(BreastCancer[,1])
 sub <- sample(1:l,2*l/3)
-BC.bagging <- bagging(Class ~.,data=BreastCancer[,-1],mfinal=25, control=rpart.control(maxdepth=3))
+BC.bagging <- bagging(Class ~.,data=BreastCancer[,-1],mfinal=20, 
+	control=rpart.control(maxdepth=3))
 BC.bagging.pred <- predict.bagging(BC.bagging,newdata=BreastCancer[-sub,-1])
 BC.bagging.pred$confusion
 BC.bagging.pred$error
@@ -76,7 +77,8 @@ library(mlbench)
 data(Vehicle)
 l <- length(Vehicle[,1])
 sub <- sample(1:l,2*l/3)
-Vehicle.bagging <- bagging(Class ~.,data=Vehicle[sub, ],mfinal=50, control=rpart.control(maxdepth=5))
+Vehicle.bagging <- bagging(Class ~.,data=Vehicle[sub, ],mfinal=40, 
+	control=rpart.control(maxdepth=5))
 Vehicle.bagging.pred <- predict.bagging(Vehicle.bagging,newdata=Vehicle[-sub, ])
 Vehicle.bagging.pred$confusion
 Vehicle.bagging.pred$error

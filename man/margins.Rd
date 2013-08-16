@@ -30,7 +30,7 @@ the support of the correct class and the maximum support of an incorrect class}
  
 }
 
-\references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``A Boosting approach for corporate failure prediction''. Applied Intelligence. 27, pp. 29--37.
+\references{Alfaro, E., Gamez, M. and Garcia, N. (2013): ``adabag: An R Package for Classification with Boosting and Bagging''. Journal of Statistical Software, Vol 54, 2, pp. 1--35.
 
   Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
 
@@ -89,14 +89,14 @@ l <- length(BreastCancer[,1])
 sub <- sample(1:l,2*l/3)
 cntrl <- rpart.control(maxdepth = 3, minsplit = 0,  cp = -1)
 
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=cntrl)
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=20, control=cntrl)
 BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1])
 
 BC.margins<-margins(BC.adaboost,BreastCancer[sub,-1]) # training set
 BC.predmargins<-margins(BC.adaboost.pred,BreastCancer[-sub,-1]) # test set
 
 #An example of Error evolution
-BC.bagging <- bagging(Class ~.,data=BreastCancer[sub,-1],mfinal=75, control=cntrl)
+BC.bagging <- bagging(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=cntrl)
 
 errorevol(BC.bagging,newdata=BreastCancer[sub,-1])->evol.train
 errorevol(BC.bagging,newdata=BreastCancer[-sub,-1])->evol.test

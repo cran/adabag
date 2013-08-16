@@ -33,7 +33,7 @@ bagging.cv(formula, data, v = 10, mfinal = 100, control)
   \item{error }{returns the average error.}
 }
 
-\references{Alfaro, E., Gamez, M. and Garcia, N. (2007): ``Multiclass corporate failure prediction by Adaboost.M1''. International Advances in Economic Research, Vol 13, 3, pp. 301--312.
+\references{Alfaro, E., Gamez, M. and Garcia, N. (2013): ``adabag: An R Package for Classification with Boosting and Bagging''. Journal of Statistical Software, Vol 54, 2, pp. 1--35.
 
 	Alfaro, E., Garcia, N., Gamez, M. and Elizondo, D. (2008): ``Bankruptcy forecasting: An empirical comparison of AdaBoost and neural networks''. Decision Support Systems, 45, pp. 110--122.
 
@@ -57,7 +57,8 @@ bagging.cv(formula, data, v = 10, mfinal = 100, control)
 ## rpart library should be loaded
 library(rpart)
 data(iris)
-iris.baggingcv <- bagging.cv(Species ~ ., v=10, data=iris, mfinal=10,control=rpart.control(maxdepth=3))
+iris.baggingcv <- bagging.cv(Species ~ ., v=2, data=iris, mfinal=5,
+control=rpart.control(maxdepth=3))
 
 
 
@@ -66,7 +67,8 @@ iris.baggingcv <- bagging.cv(Species ~ ., v=10, data=iris, mfinal=10,control=rpa
 library(rpart)
 library(mlbench)
 data(Vehicle)
-Vehicle.bagging.cv <- bagging.cv(Class ~.,data=Vehicle,v=5,mfinal=20, control=rpart.control(maxdepth=5))
+Vehicle.bagging.cv <- bagging.cv(Class ~.,data=Vehicle,v=5,mfinal=10, 
+control=rpart.control(maxdepth=5))
 Vehicle.bagging.cv[-1]
 
 }
