@@ -70,33 +70,15 @@
 
 ## rpart library should be loaded
 data(iris)
-iris.adaboost <- boosting(Species~., data=iris, boos=TRUE, mfinal=10)
-
-
-## Comparing the test error of rpart and adaboost.M1
-data(BreastCancer)
-l <- length(BreastCancer[,1])
-sub <- sample(1:l,2*l/3)
-
-BC.rpart <- rpart(Class~.,data=BreastCancer[sub,-1], maxdepth=3)
-BC.rpart.pred <- predict(BC.rpart,newdata=BreastCancer[-sub,-1],type="class")
-tb <-table(BC.rpart.pred,BreastCancer$Class[-sub])
-error.rpart <- 1-(sum(diag(tb))/sum(tb))
-tb
-error.rpart
-
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[,-1],mfinal=20, coeflearn="Freund", 
-boos=FALSE , control=rpart.control(maxdepth=3))
-BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1])
-BC.adaboost.pred$confusion
-BC.adaboost.pred$error
+iris.adaboost <- boosting(Species~., data=iris, boos=TRUE, mfinal=5)
+iris.adaboost
 
 
 ## Data Vehicle (four classes) 
 data(Vehicle)
 l <- length(Vehicle[,1])
 sub <- sample(1:l,2*l/3)
-mfinal <- 25
+mfinal <- 15 
 maxdepth <- 5
 
 Vehicle.rpart <- rpart(Class~.,data=Vehicle[sub,],maxdepth=maxdepth)
@@ -112,15 +94,11 @@ Vehicle.adaboost.pred <- predict.boosting(Vehicle.adaboost,newdata=Vehicle[-sub,
 Vehicle.adaboost.pred$confusion
 Vehicle.adaboost.pred$error
 
-
+#comparing error evolution in training and test set
 errorevol(Vehicle.adaboost,newdata=Vehicle[sub, ])->evol.train
 errorevol(Vehicle.adaboost,newdata=Vehicle[-sub, ])->evol.test
 
-#comparing error evolution in training and test set
-plot(evol.test$error, type="l",   main="AdaBoost error Vs number of trees",  
-xlab="Iterations", ylab="Error", col = "red") 
-lines(evol.train$error, cex = .5 ,col="blue", lty=2)
-legend("topright", c("test","train"), col = c("red", "blue"), lty=1:2)
+plot.errorevol(evol.test,evol.train)
 
 
 }

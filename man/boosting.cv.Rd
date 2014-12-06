@@ -65,24 +65,22 @@ boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100,
 
 
 \examples{
+
 ## rpart library should be loaded
-library(rpart)
 data(iris)
-names(iris)<-c("LS","AS","LP","AP","Especies")
-iris.boostcv <- boosting.cv(Especies ~ ., v=2, data=iris, mfinal=5, 
+iris.boostcv <- boosting.cv(Species ~ ., v=2, data=iris, mfinal=10, 
 control=rpart.control(cp=0.01))
 iris.boostcv[-1]
 
-
-
 ## rpart and mlbench libraries should be loaded
 ## Data Vehicle (four classes) 
-library(rpart)
-library(mlbench)
-data(Vehicle)
-Vehicle.boost.cv <- boosting.cv(Class ~.,data=Vehicle,v=5, mfinal=10, coeflearn="Zhu",
-control=rpart.control(maxdepth=5))
-Vehicle.boost.cv[-1]
+#This example has been hidden to fulfill execution time <5s 
+#data(Vehicle)
+#Vehicle.boost.cv <- boosting.cv(Class ~.,data=Vehicle,v=5, mfinal=10, coeflearn="Zhu",
+#control=rpart.control(maxdepth=5))
+#Vehicle.boost.cv[-1]
+
+
 
 }
 

@@ -2,7 +2,7 @@
 # Export all names
 #exportPattern(".")
 
-exportPattern(bagging, bagging.cv, boosting, boosting.cv, errorevol, margins)
+exportPattern(bagging, bagging.cv, boosting, boosting.cv, errorevol, margins, autoprune,MarginOrderedPruning.Bagging, importanceplot)
 
 
 # Import all packages listed as Imports or Depends
@@ -14,3 +14,5 @@ import(
 
 S3method(predict, boosting)
 S3method(predict, bagging)
+S3method(plot, errorevol)
+S3method(plot, margins)

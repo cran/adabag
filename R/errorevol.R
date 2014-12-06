@@ -19,14 +19,15 @@ nclases <- nlevels(vardep)
 if(class(object)=="bagging"){ponderacion<-rep(1,mfinal)}
 else{ponderacion<- object$weights}
 
-pred<- data.frame(rep(0,n)) # Crea un dataframe para guardar las pred, al 1º está vacío, pero luego se va añadiendo
+#pred<- data.frame(rep(0,n)) # Crea un dataframe para guardar las pred, al 1º está vacío, pero luego se va añadiendo
 erroracum<-rep(0,mfinal)#Creo un vector para guardar los errores conforme evoluciona boosting
 
-for (m in 1:mfinal) {
+#for (m in 1:mfinal) {
+#if(m==1){pred <- predict(object$trees[[m]],newdata,type="class")} 
+#else{pred <- data.frame(pred,predict(object$trees[[m]],newdata,type="class"))} 
+#}
 
-if(m==1){pred <- predict(object$trees[[m]],newdata,type="class")} 
-else{pred <- data.frame(pred,predict(object$trees[[m]],newdata,type="class"))} 
-}
+pred<-as.data.frame(sapply (object$trees, predict, newdata=newdata, type="class"))
 
 
 
@@ -52,9 +53,12 @@ for (i in 1:nlevels(vardep)) {classfinal[,i] <- apply(cbind(classfinal[,i],mvoto
 
 
 predclass <- rep("O",n)
-for(i in 1:n){
-predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])
-}
+#2014-11-12 ¿Se puede hacer esto usando apply para evitar el bucle? 
+#Creo la funcion "select" que en caso de empate devuelva la clase mayoritaria de entre las empatadas
+predclass[]<-apply(classfinal,1,FUN=select, vardep=vardep)
+
+
+#for(i in 1:n){predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])}
 
 
 # Para que devuelva el error en newdata

@@ -57,19 +57,18 @@ bagging.cv(formula, data, v = 10, mfinal = 100, control)
 ## rpart library should be loaded
 library(rpart)
 data(iris)
-iris.baggingcv <- bagging.cv(Species ~ ., v=2, data=iris, mfinal=5,
-control=rpart.control(maxdepth=3))
-
+iris.baggingcv <- bagging.cv(Species ~ ., v=2, data=iris, mfinal=10,
+control=rpart.control(cp=0.01))
+iris.baggingcv[-1]
 
 
 ## rpart and mlbench libraries should be loaded
 ## Data Vehicle (four classes) 
-library(rpart)
-library(mlbench)
-data(Vehicle)
-Vehicle.bagging.cv <- bagging.cv(Class ~.,data=Vehicle,v=5,mfinal=10, 
-control=rpart.control(maxdepth=5))
-Vehicle.bagging.cv[-1]
+#This example has been hidden to keep execution time <5s
+#data(Vehicle)
+#Vehicle.bagging.cv <- bagging.cv(Class ~.,data=Vehicle,v=5,mfinal=10, 
+#control=rpart.control(maxdepth=5))
+#Vehicle.bagging.cv[-1]
 
 }
 

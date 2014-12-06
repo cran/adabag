@@ -1,3 +1,4 @@
+
 boosting <-
 function(formula, data,boos=TRUE, mfinal=100, coeflearn="Breiman", control) {
 
@@ -19,13 +20,31 @@ data<-data.frame(pesos, data) #Los pesos en rpart deben ser una columna del data
 
      arboles <- list() #Creamos una lista para guardar los arboles
 pond <- rep(0,mfinal) # Un vector donde guardaremos la ponderacion de cada arbol.
+pred<- data.frame(rep(0,n))
+
+	#2012-05-16 nueva medida de importancia
+	#sustituye a acum
+	arboles[[1]] <- rpart(formula, data = data[,-1], control = control) #Para sacar el n de variables, este luego lo sustituye en el bucle
+	nvar<-dim(varImp(arboles[[1]], surrogates = FALSE, competes = FALSE))[1]
+	imp<- array(0, c(mfinal,nvar))  #Creo una matriz para guardar el "improve" de cada variable conforme evoluciona boosting
+
+
+
 
 for (m in 1:mfinal) {
 #Creamos muestras boostrap utilizando los pesos
 
 if (boos==TRUE) {
-boostrap<- sample(1:n,replace=TRUE,prob=pesos)
-fit <- rpart(formula,data=data[boostrap,-1], control=control)
+            k <- 1		#Gracias a Ignacio Medina 2014-11-06; Evitamos arboles sin ningún corte
+            while (k == 1){
+            
+            boostrap <- sample(1:n, replace = TRUE, prob = pesos)
+            fit <- rpart(formula, data = data[boostrap, -1], control = control)
+            k <- length(fit$frame$var)
+            }	#Hasta aquí Gracias a Ignacio Medina 2014-11-06
+		#La solucion I. Medina con boos=FALSE puede no converger
+
+
         flearn <- predict(fit,newdata=data[,-1],type="class")
 ind<-as.numeric(vardep != flearn) #crear un vector indicador
 err<- sum(pesos*ind)         #Calcula el error ponderado en esa iteracion
@@ -35,7 +54,7 @@ err<- sum(pesos*ind)         #Calcula el error ponderado en esa iteracion
 #limitamos el tamaño del arbol para que sean distintos?
 if (boos==FALSE) {
 	w<<- pesos
-	fit <- rpart(formula=formula, data=data[,-1], weights=w, control=control) 
+  	    fit <- rpart(formula=formula, data=data[,-1], weights=w, control=control) 
 
         flearn <- predict(fit,data=data[,-1], type="class")
 ind<-as.numeric(vardep != flearn) #Crear un vector indicador
@@ -104,29 +123,20 @@ c<- log((1-eac)/eac)
 
 }
 
-arboles[[m]] <- fit#Guardamos los arboles
-pond[m]<- c #Guardamos las ponderaciones
+arboles[[m]] <- fit	#Guardamos los arboles
+pond[m]<- c 		#Guardamos las ponderaciones
 
+if(m==1){pred <- flearn}
+else{pred <- data.frame(pred,flearn)}
 
-}
-
-pred<- data.frame(rep(0,n))
-
-	#2012-05-16 nueva medida de importancia
-	#sustituye a acum
-	nvar<-dim(varImp(arboles[[1]], surrogates = FALSE, competes = FALSE))[1]
-	imp<- array(0, c(mfinal,nvar))  #Creo una matriz para guardar el "improve" de cada variable conforme evoluciona boosting
-
-
-
-for (m in 1:mfinal) {
-if(m==1){pred <- predict(arboles[[m]],data[,-1],type="class")}
-else{pred <- data.frame(pred,predict(arboles[[m]],data[,-1],type="class"))}
-
-		k <- varImp(arboles[[m]], surrogates = FALSE, competes = FALSE)
+if(length(fit$frame$var)>1){
+		k <- varImp(fit, surrogates = FALSE, competes = FALSE)
 		imp[m,] <-k[sort(row.names(k)), ]
-}
+		}
+	else {imp[m,]<-rep(0,nvar)} #La solucion I. Medina da problemas con boos=FALSE
 
+
+}
 
 
 classfinal <- array(0, c(n,nlevels(vardep)))
@@ -135,9 +145,18 @@ for (i in 1:nlevels(vardep)){
 }
 
 predclass <- rep("O",n)
-for(i in 1:n){
-predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])
-}
+#2014-11-12 ¿Se puede hacer esto usando apply para evitar el bucle? 
+#Creo la funcion "select" que en caso de empate devuelva la clase mayoritaria de entre las empatadas
+predclass[]<-apply(classfinal,1,FUN=select, vardep=vardep)
+
+#for(i in 1:n){	#Cambio esto para resolver los empates
+#predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])
+#if(length(which(classfinal[i,]==max(classfinal[i,])))>1)
+#	{predclass[i] <-names(summary(vardep)[which(classfinal[i,]==max(classfinal[i,]))])[
+#order(summary(vardep)[which(classfinal[i,]==max(classfinal[i,]))],decreasing=TRUE)[1]]
+#}
+#else{predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])} 
+#}
 
 #normalizar la importancia de las variables teniendo en cuenta la pond de cada arbol
 	imppond<-as.vector(as.vector(pond)%*%imp)

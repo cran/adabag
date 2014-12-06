@@ -70,25 +70,13 @@ library(mlbench)
 data(BreastCancer)
 l <- length(BreastCancer[,1])
 sub <- sample(1:l,2*l/3)
-BC.bagging <- bagging(Class ~.,data=BreastCancer[,-1],mfinal=20, 
+BC.bagging <- bagging(Class ~.,data=BreastCancer[,-1],mfinal=15, 
 control=rpart.control(maxdepth=3))
 BC.bagging.pred <- predict.bagging(BC.bagging,newdata=BreastCancer[-sub,-1])
 BC.bagging.pred$prob
 BC.bagging.pred$confusion
 BC.bagging.pred$error
 
-# Data Vehicle (four classes)
-library(rpart)
-library(mlbench)
-data(Vehicle)
-l <- length(Vehicle[,1])
-sub <- sample(1:l,2*l/3)
-Vehicle.bagging <- bagging(Class ~.,data=Vehicle[sub, ],mfinal=30, 
-control=rpart.control(minsplit=15))
-#Using the pruning option
-Vehicle.bagging.pred <- predict.bagging(Vehicle.bagging,newdata=Vehicle[-sub, ], newmfinal=30)
-Vehicle.bagging.pred$confusion
-Vehicle.bagging.pred$error
 
 }
 

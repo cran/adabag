@@ -1,6 +1,12 @@
 boosting.cv <-
 function ( formula, data,v=10,boos=TRUE ,mfinal=100, coeflearn="Breiman", control) 
 {
+
+#Exigimos que coeflearn sea uno de esos tres valores
+if (!(as.character(coeflearn) %in% c("Freund","Breiman","Zhu"))){
+stop("coeflearn must be 'Freund', 'Breiman' or 'Zhu' ")
+}
+
 vardep<-data[,as.character(formula[[2]])]
 n <- length(vardep)
 #para validacion cruzada 2<v<n
@@ -13,8 +19,8 @@ predclass <- rep("O",n)
         test <- v * (0:floor(n/v)) + i
         test <- test[test < n + 1]
         fit <- boosting(formula, data[-test,],boos ,mfinal,coeflearn,control=control)
-fit.predict<-predict.boosting(fit, data[test,])
-        predclass[test] <- fit.predict$class
+	predclass[test] <- predict.boosting(fit, data[test,])$class
+
 cat("i: ", c(i, date()), "\n")
     }
 

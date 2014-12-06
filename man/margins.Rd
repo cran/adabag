@@ -5,7 +5,7 @@
 
 \description{ Calculates the margins of an AdaBoost.M1, AdaBoost-SAMME or Bagging classifier for a data frame}
 
-%no se si es margins or margin
+
 \usage{ margins(object, newdata)
 }
 
@@ -41,10 +41,11 @@ the support of the correct class and the maximum support of an incorrect class}
 
 
 \seealso{ 
-       \code{\link{boosting}},
-       \code{\link{predict.boosting}},
-    	\code{\link{bagging}},
-	\code{\link{predict.bagging}},
+	\code{\link{bagging}},
+	\code{\link{boosting}},
+	\code{\link{plot.margins}},
+	\code{\link{predict.boosting}},
+	\code{\link{predict.bagging}}
 }
 
 \examples{
@@ -55,57 +56,21 @@ data(iris)
 sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
 iris.adaboost <- boosting(Species ~ ., data=iris[sub,], mfinal=10)
 margins(iris.adaboost,iris[sub,])->iris.margins # training set
+plot.margins(iris.margins)
 
 # test set
 iris.predboosting<- predict.boosting(iris.adaboost, newdata=iris[-sub,])
 margins(iris.predboosting,iris[-sub,])->iris.predmargins 
-
+plot.margins(iris.predmargins,iris.margins)
 
 #Examples with bagging
 iris.bagging <- bagging(Species ~ ., data=iris[sub,], mfinal=10)
-margins(iris.bagging,iris[sub,])->iris.baggging.margins # training set
-
+margins(iris.bagging,iris[sub,])->iris.bagging.margins # training set
 
 iris.predbagging<- predict.bagging(iris.bagging, newdata=iris[-sub,])
-margins(iris.predbagging,iris[-sub,])->iris.baggging.predmargins # test set
-
-# We change the name to the margins object to save space 
-# and use the same code for the graph
-#iris.margins<-iris.predmargins 
-#iris.margins<-iris.baggging.margins
-#iris.margins<-iris.baggging.predmargins
-
-# Example of a graph using the margins
+margins(iris.predbagging,iris[-sub,])->iris.bagging.predmargins # test set
 par(bg="lightyellow")
-
-plot(sort(iris.margins[[1]]), (1:length(iris.margins[[1]]))/length(iris.margins[[1]]), 
-type="l", xlim=c(-1,1),main="Margin cumulative distribution graph", xlab="m", 
-ylab="\% training set", col="blue3")
-abline(v=0, col="red",lty=2)
-
-
-data(BreastCancer)
-l <- length(BreastCancer[,1])
-sub <- sample(1:l,2*l/3)
-cntrl <- rpart.control(maxdepth = 3, minsplit = 0,  cp = -1)
-
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=20, control=cntrl)
-BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1])
-
-BC.margins<-margins(BC.adaboost,BreastCancer[sub,-1]) # training set
-BC.predmargins<-margins(BC.adaboost.pred,BreastCancer[-sub,-1]) # test set
-
-#An example of Error evolution
-BC.bagging <- bagging(Class ~.,data=BreastCancer[sub,-1],mfinal=25, control=cntrl)
-
-errorevol(BC.bagging,newdata=BreastCancer[sub,-1])->evol.train
-errorevol(BC.bagging,newdata=BreastCancer[-sub,-1])->evol.test
-
-par(mfrow = c(1, 2))
-plot(evol.train$error, type="l", main="Bagging training error Vs number of trees",  
-xlab="Iterations", ylab="Error", ylim=c(0,0.5), col = "blue") 
-plot(evol.test$error, type="l", main="Bagging test error Vs number of trees",  
-xlab="Iterations", ylab="Error", ylim=c(0,0.5), col = "red") 
+plot.margins(iris.bagging.predmargins,iris.bagging.margins)
 
 
 }

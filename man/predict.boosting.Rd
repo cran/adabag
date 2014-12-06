@@ -69,12 +69,13 @@
 
 \examples{
 ## rpart library should be loaded
-library(rpart)
-data(iris)
-sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
-iris.adaboost <- boosting(Species ~ ., data=iris[sub,], mfinal=10)
-iris.predboosting<- predict.boosting(iris.adaboost, newdata=iris[-sub,])
-iris.predboosting$prob
+#This example has been hidden to fulfill execution time <5s 
+#library(rpart)
+#data(iris)
+#sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
+#iris.adaboost <- boosting(Species ~ ., data=iris[sub,], mfinal=10)
+#iris.predboosting<- predict.boosting(iris.adaboost, newdata=iris[-sub,])
+#iris.predboosting$prob
 
 ## rpart and mlbench libraries should be loaded
 ## Comparing the test error of rpart and adaboost.M1
@@ -91,8 +92,8 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=25, 
-	control=rpart.control(maxdepth=3))
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[,-1],mfinal=25, coeflearn="Freund", 
+boos=FALSE , control=rpart.control(maxdepth=3))
 
 #Using the pruning option
 BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1], newmfinal=15)
@@ -100,27 +101,7 @@ BC.adaboost.pred$confusion
 BC.adaboost.pred$error
 
 
-## Data Vehicle (four classes) 
-library(rpart)
-library(mlbench)
-data(Vehicle)
-l <- length(Vehicle[,1])
-sub <- sample(1:l,2*l/3)
-mfinal <- 25
-maxdepth <- 5
 
-Vehicle.rpart <- rpart(Class~.,data=Vehicle[sub,],maxdepth=maxdepth)
-Vehicle.rpart.pred <- predict(Vehicle.rpart,newdata=Vehicle[-sub, ],type="class")
-tb <- table(Vehicle.rpart.pred,Vehicle$Class[-sub])
-error.rpart <- 1-(sum(diag(tb))/sum(tb))
-tb
-error.rpart
-
-Vehicle.adaboost <- boosting(Class ~.,data=Vehicle[sub, ],mfinal=mfinal, coeflearn="Zhu",
-	control=rpart.control(maxdepth=maxdepth))
-Vehicle.adaboost.pred <- predict.boosting(Vehicle.adaboost,newdata=Vehicle[-sub, ])
-Vehicle.adaboost.pred$confusion
-Vehicle.adaboost.pred$error
 
 }
 

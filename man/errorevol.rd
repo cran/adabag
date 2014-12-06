@@ -53,30 +53,25 @@ it can detect the presence of overfitting and, therefore, the convenience of pru
        \code{\link{boosting}},
        \code{\link{predict.boosting}},
   	\code{\link{bagging}},
-	\code{\link{predict.bagging}},
+	\code{\link{predict.bagging}}
 }
 \examples{
 
 
-data(iris)
-train <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
+data(BreastCancer)
+l <- length(BreastCancer[,1])
+sub <- sample(1:l,2*l/3)
+cntrl <- rpart.control(maxdepth = 3, minsplit = 0,  cp = -1)
 
-cntrl<-rpart.control(maxdepth=1)
-iris.adaboost <- boosting(Species ~ ., data=iris[train,], mfinal=50, control=cntrl)
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[sub,-1],mfinal=20, control=cntrl)
+BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1])
 
-#Error evolution along the iterations in training set 
-errorevol(iris.adaboost,iris[train,])->evol.train
-plot(evol.train$error, type="l", main="Adaboost error Vs number of trees",  col = "blue") 
+errorevol(BC.adaboost,newdata=BreastCancer[-sub,-1])->evol.test
+errorevol(BC.adaboost,newdata=BreastCancer[sub,-1])->evol.train
 
-#comparing error evolution in training and test set
-errorevol(iris.adaboost,iris[-train,])->evol.test
-plot(evol.test$error, type="l", ylim=c(0,1),  main="Adaboost error Vs number of trees",  
-xlab="Iterations", ylab="Error", col = "red")
-lines(evol.train$error, cex = .5 ,col="blue", lty=2)
-legend("topright", c("test","train"), col = c("red", "blue"), lty=1:2)
-
-# See the help of the functions margins and boosting 
-# for more examples of the use of the error evolution
+plot.errorevol(evol.test,evol.train)
+abline(h=min(evol.test[[1]]), col="red",lty=2,lwd=2)
+abline(h=min(evol.train[[1]]), col="blue",lty=2,lwd=2)
 
 
 }
