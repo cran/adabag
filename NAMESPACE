@@ -16,3 +16,7 @@ S3method(predict, boosting)
 S3method(predict, bagging)
 S3method(plot, errorevol)
 S3method(plot, margins)
+
+#2015-10 lo añado
+importFrom("graphics", "abline", "barplot", "legend", "lines", "plot")
+importFrom("stats", "as.formula", "predict", "model.frame")

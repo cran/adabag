@@ -9,7 +9,7 @@
 
 \usage{
   boosting(formula, data, boos = TRUE, mfinal = 100, coeflearn = 'Breiman', 
-	control)
+	control,...)
 }
 
 \arguments{
@@ -25,6 +25,7 @@
    and \code{alpha} is the weight updating coefficient. On the other hand, if coeflearn is 'Zhu' the SAMME algorithm 
    is implemented with \code{alpha=ln((1-err)/err)+} \code{ln(nclasses-1)}.}
   \item{control}{options that control details of the rpart algorithm. See rpart.control for more details.  }
+  \item{...}{ further arguments passed to or from other methods.}
 
 }
 
@@ -78,7 +79,7 @@ iris.adaboost
 data(Vehicle)
 l <- length(Vehicle[,1])
 sub <- sample(1:l,2*l/3)
-mfinal <- 15 
+mfinal <- 10 
 maxdepth <- 5
 
 Vehicle.rpart <- rpart(Class~.,data=Vehicle[sub,],maxdepth=maxdepth)

@@ -92,11 +92,11 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[,-1],mfinal=25, coeflearn="Freund", 
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[,-1],mfinal=20, coeflearn="Freund", 
 boos=FALSE , control=rpart.control(maxdepth=3))
 
 #Using the pruning option
-BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1], newmfinal=15)
+BC.adaboost.pred <- predict.boosting(BC.adaboost,newdata=BreastCancer[-sub,-1], newmfinal=10)
 BC.adaboost.pred$confusion
 BC.adaboost.pred$error
 

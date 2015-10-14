@@ -64,7 +64,7 @@ margins(iris.predboosting,iris[-sub,])->iris.predmargins
 plot.margins(iris.predmargins,iris.margins)
 
 #Examples with bagging
-iris.bagging <- bagging(Species ~ ., data=iris[sub,], mfinal=10)
+iris.bagging <- bagging(Species ~ ., data=iris[sub,], mfinal=5)
 margins(iris.bagging,iris[sub,])->iris.bagging.margins # training set
 
 iris.predbagging<- predict.bagging(iris.bagging, newdata=iris[-sub,])

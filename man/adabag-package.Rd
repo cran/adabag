@@ -6,27 +6,30 @@
  Applies Multiclass AdaBoost.M1, SAMME and Bagging
 }
 \description{
-It implements Freund and Schapire's Adaboost.M1 algorithm and Breiman's
-	Bagging algorithm using classification trees as individual classifiers. Once these classifiers 
-	have been trained, they can be used to predict on new data. Also, cross validation estimation of the
-	error can be done. Since version 2.0 the function "margins" is available to calculate the margins for these
-	classifiers. Also a higher flexibility is achieved giving access to the "rpart.control" argument 
-	of "rpart". Four important new features were introduced on version 3.0, AdaBoost-SAMME (Zhu 
-	et al., 2009) is implemented and a new function "errorevol" shows the error of the ensembles as
+
+It implements Freund and Schapire's Adaboost.M1 algorithm and Breiman's Bagging
+	algorithm using classification trees as individual classifiers. Once these classifiers have been
+	trained, they can be used to predict on new data. Also, cross validation estimation of the error can
+	be done. Since version 2.0 the function margins() is available to calculate the margins for these
+	classifiers. Also a higher flexibility is achieved giving access to the rpart.control() argument
+	of 'rpart'. Four important new features were introduced on version 3.0, AdaBoost-SAMME (Zhu 
+	et al., 2009) is implemented and a new function errorevol() shows the error of the ensembles as
 	a function of the number of iterations. In addition, the ensembles can be pruned using the option 
-	"newmfinal" in the predict.bagging and predict.boosting functions and the posterior probability of
+	'newmfinal' in the predict.bagging() and predict.boosting() functions and the posterior probability of
 	each class for observations can be obtained. Version 3.1 modifies the relative importance measure
 	to take into account the gain of the Gini index given by a variable in each tree and the weights of 
 	these trees. Version 4.0 includes the margin-based ordered aggregation for Bagging pruning (Guo
-	and Boukir, 2013) and a function to auto prune the rpart tree. Moreover, three new plots are also 
-	available importanceplot, plot.errorevol and plot.margins.
+	and Boukir, 2013) and a function to auto prune the 'rpart' tree. Moreover, three new plots are also 
+	available importanceplot(), plot.errorevol() and plot.margins(). Version 4.1 allows to predict on 
+	unlabeled data.
+
 }
 \details{
 \tabular{ll}{
 Package: \tab adabag\cr
 Type: \tab Package\cr
-Version: \tab 4.0\cr
-Date: \tab 2014-12-06\cr
+Version: \tab 4.1\cr
+Date: \tab 2015-10-14\cr
 License: \tab GPL(>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -124,13 +127,17 @@ Maintainer: Esteban Alfaro-Cortes <Esteban.Alfaro@uclm.es>
 ## rpart library should be loaded
 data(iris)
 iris.adaboost <- boosting(Species~., data=iris, boos=TRUE, 
-	mfinal=10)
+	mfinal=6)
 importanceplot(iris.adaboost)
 
-sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
+sub <- c(sample(1:50, 35), sample(51:100, 35), sample(101:150, 35))
 iris.bagging <- bagging(Species ~ ., data=iris[sub,], mfinal=10)
-iris.predbagging<- predict.bagging(iris.bagging, newdata=iris[-sub,])
-
+#Predicting with labeled data
+iris.predbagging<-predict.bagging(iris.bagging, newdata=iris[-sub,])
+iris.predbagging
+#Predicting with unlabeled data
+iris.predbagging<- predict.bagging(iris.bagging, newdata=iris[-sub,-5])
+iris.predbagging
 }
 
 \keyword{tree }% at least one, from doc/KEYWORDS

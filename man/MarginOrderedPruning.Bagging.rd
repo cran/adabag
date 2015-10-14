@@ -52,8 +52,9 @@ Questions about this function should be sent to Li Guo
 }
 \examples{
 ## mlbench package should be loaded
+library(mlbench)
 data(Satellite)
-## Separate data into 3 parties: training set, pruning set and test set
+## Separate data into 3 parts: training set, pruning set and test set
 ind <- sample(3, nrow(Satellite), replace = TRUE, prob=c(0.3, 0.2,0.5))
 
 ## create bagging with training set

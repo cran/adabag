@@ -1,5 +1,5 @@
 bagging <-
-function(formula, data, mfinal=100, control) {
+function(formula, data, mfinal=100, control,...) {
 
 formula<- as.formula(formula)
 vardep <- data[,as.character(formula[[2]])]
@@ -11,7 +11,11 @@ pred<- data.frame(rep(0,n)) # Dataframe para guardar las pred, al inicio esta va
 replicas <- array(0, c(n,mfinal))
 	#2012-05-16 nueva medida de importancia
 	#sustituye a acum
-	arboles[[1]] <- rpart(formula, data = data, control = control) #Para sacar el n de variables, este luego lo sustituye en el bucle
+	arboles[[1]] <- rpart(formula, data = data, control = rpart.control(minsplit=1, cp=-1, maxdepth=30) ) 
+
+#Para sacar el n de variables, este luego lo sustituye en el bucle
+
+#if( is.numeric(nrow(arboles[[1]]$splits))=="FALSE" ) stop("change rpart.control to avoid empty trees")
 	nvar<-dim(varImp(arboles[[1]], surrogates = FALSE, competes = FALSE))[1]
 	imp<- array(0, c(mfinal,nvar))  #Creo una matriz para guardar el "improve" de cada variable conforme evoluciona boosting/bagging
 
@@ -39,6 +43,7 @@ replicas[,m]<-boostrap
 #if(m==1){pred <- predict(arboles[[m]],data,type="class")} 
 #else{pred <- data.frame(pred,predict(arboles[[m]],data,type="class"))} 
 
+
 		k <- varImp(arboles[[m]], surrogates = FALSE, competes = FALSE)
 		imp[m,] <-k[sort(row.names(k)), ]
 
@@ -57,9 +62,10 @@ for (i in 1:nlevels(vardep)){
 }
 
 predclass <- rep("O",n)	
-#2014-11-12 ¿Se puede hacer esto usando apply para evitar el bucle? 
+#2014-11-12 Se puede hacer esto usando apply para evitar el bucle? 
 #Creo la funcion "select" que en caso de empate devuelva la clase mayoritaria de entre las empatadas
-predclass[]<-apply(classfinal,1,FUN=select, vardep=vardep)
+#2015-07-25 modifico la funcion select para poder usar predict con unlabeled data
+predclass[]<-apply(classfinal,1,FUN=select, vardep.summary=summary(vardep))
 
 #for(i in 1:n){
 #predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])
@@ -84,7 +90,20 @@ classfinal/apply(classfinal,1,sum)->votosporc
 
 ans<- list(formula=formula,trees=arboles,votes=classfinal,prob=votosporc,class=predclass, samples=replicas, importance=imppond)
 
+#2015-07-25 pruebo a meter las clases de vardep como atributo de la salida
+attr(ans, "vardep.summary") <- summary(vardep, maxsum=700)
+
+mf <- model.frame(formula=formula, data=data) 
+terms <- attr(mf, "terms") 
+ans$terms <- terms 
+ans$call <- match.call()
+
+
+
+
 class(ans) <- "bagging"
 ans
 
 }
+
+

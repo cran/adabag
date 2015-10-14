@@ -62,7 +62,7 @@ train <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
 cntrl<-rpart.control(maxdepth=1)
 #increase mfinal in your own execution of this example to see 
 #the real usefulness of this function
-iris.adaboost <- boosting(Species ~ ., data=iris[train,], mfinal=25, control=cntrl)
+iris.adaboost <- boosting(Species ~ ., data=iris[train,], mfinal=10, control=cntrl)
 
 #Error evolution along the iterations in training set 
 errorevol(iris.adaboost,iris[train,])->evol.train

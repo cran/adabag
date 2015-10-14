@@ -24,7 +24,7 @@ predictOrderedAggregation.bagging(object, newdata, myorder,doTrace=TRUE)
 
 vote.bagging(object, newdata,OOB=TRUE, myTreeIndex=seq(1,length(object$trees))) 
 
-select(fila, vardep, ...)
+select(fila, vardep.summary, ...)
 }
 
 \details{These are not to be called by the user}

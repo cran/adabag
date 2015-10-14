@@ -1,6 +1,6 @@
 
 boosting <-
-function(formula, data,boos=TRUE, mfinal=100, coeflearn="Breiman", control) {
+function(formula, data,boos=TRUE, mfinal=100, coeflearn="Breiman", control, ...) {
 
 
 #Exigimos que coeflearn sea uno de esos dos valores
@@ -24,7 +24,8 @@ pred<- data.frame(rep(0,n))
 
 	#2012-05-16 nueva medida de importancia
 	#sustituye a acum
-	arboles[[1]] <- rpart(formula, data = data[,-1], control = control) #Para sacar el n de variables, este luego lo sustituye en el bucle
+	arboles[[1]] <- rpart(formula, data = data[,-1], control = rpart.control(minsplit=1, cp=-1, maxdepth=30) ) 
+	#Para sacar el n de variables, este luego lo sustituye en el bucle
 	nvar<-dim(varImp(arboles[[1]], surrogates = FALSE, competes = FALSE))[1]
 	imp<- array(0, c(mfinal,nvar))  #Creo una matriz para guardar el "improve" de cada variable conforme evoluciona boosting
 
@@ -35,13 +36,13 @@ for (m in 1:mfinal) {
 #Creamos muestras boostrap utilizando los pesos
 
 if (boos==TRUE) {
-            k <- 1		#Gracias a Ignacio Medina 2014-11-06; Evitamos arboles sin ningún corte
+            k <- 1		#Gracias a Ignacio Medina 2014-11-06; Evitamos arboles sin ningun corte
             while (k == 1){
             
             boostrap <- sample(1:n, replace = TRUE, prob = pesos)
             fit <- rpart(formula, data = data[boostrap, -1], control = control)
             k <- length(fit$frame$var)
-            }	#Hasta aquí Gracias a Ignacio Medina 2014-11-06
+            }	#Hasta aqui Gracias a Ignacio Medina 2014-11-06
 		#La solucion I. Medina con boos=FALSE puede no converger
 
 
@@ -51,7 +52,7 @@ err<- sum(pesos*ind)         #Calcula el error ponderado en esa iteracion
 
 }
 
-#limitamos el tamaño del arbol para que sean distintos?
+#limitamos el tamagno del arbol para que sean distintos?
 if (boos==FALSE) {
 	w<<- pesos
   	    fit <- rpart(formula=formula, data=data[,-1], weights=w, control=control) 
@@ -145,9 +146,13 @@ for (i in 1:nlevels(vardep)){
 }
 
 predclass <- rep("O",n)
-#2014-11-12 ¿Se puede hacer esto usando apply para evitar el bucle? 
+#2014-11-12 Se puede hacer esto usando apply para evitar el bucle? 
 #Creo la funcion "select" que en caso de empate devuelva la clase mayoritaria de entre las empatadas
-predclass[]<-apply(classfinal,1,FUN=select, vardep=vardep)
+#predclass[]<-apply(classfinal,1,FUN=select, vardep=vardep)
+
+#2015-07-25 modifico la funcion select para poder usar predict con unlabeled data
+predclass[]<-apply(classfinal,1,FUN=select, vardep.summary=summary(vardep))
+
 
 #for(i in 1:n){	#Cambio esto para resolver los empates
 #predclass[i] <- as.character(levels(vardep)[(order(classfinal[i,],decreasing=TRUE)[1])])
@@ -174,6 +179,15 @@ classfinal/apply(classfinal,1,sum)->votosporc
 
 
 ans<- list(formula=formula, trees=arboles, weights=pond, votes=classfinal,prob=votosporc,class=predclass, importance=imppond)
+
+#2015-07-25 pruebo a meter las clases de vardep como atributo de la salida
+attr(ans, "vardep.summary") <- summary(vardep, maxsum=700)
+
+mf <- model.frame(formula=formula, data=data) 
+terms <- attr(mf, "terms") 
+ans$terms <- terms 
+ans$call <- match.call()
+
 
 class(ans)<-"boosting"
 ans
