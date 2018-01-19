@@ -71,15 +71,16 @@
 
 ## rpart library should be loaded
 data(iris)
-iris.adaboost <- boosting(Species~., data=iris, boos=TRUE, mfinal=5)
+iris.adaboost <- boosting(Species~., data=iris, boos=TRUE, mfinal=3)
 iris.adaboost
 
 
 ## Data Vehicle (four classes) 
+library(mlbench)
 data(Vehicle)
 l <- length(Vehicle[,1])
 sub <- sample(1:l,2*l/3)
-mfinal <- 10 
+mfinal <- 3 
 maxdepth <- 5
 
 Vehicle.rpart <- rpart(Class~.,data=Vehicle[sub,],maxdepth=maxdepth)

@@ -11,7 +11,7 @@
 
 \usage{
 boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100, 
- coeflearn = "Breiman", control)
+ coeflearn = "Breiman", control, par=FALSE) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{  
@@ -32,6 +32,8 @@ boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100,
    and \code{alpha} is the weight updating coefficient. On the other hand, if coeflearn is 'Zhu' the SAMME algorithm 
    is implemented with \code{alpha=ln((1-err)/err)+} \code{ln(nclasses-1)}.}
   \item{control}{options that control details of the rpart algorithm. See rpart.control for more details.  }
+  \item{par}{ if \code{TRUE}, the cross validation process is runned in parallel. If \code{FALSE} (by default),
+ the function runs without parallelization.  }
 }
 
 
@@ -68,7 +70,7 @@ boosting.cv(formula, data, v = 10, boos = TRUE, mfinal = 100,
 
 ## rpart library should be loaded
 data(iris)
-iris.boostcv <- boosting.cv(Species ~ ., v=2, data=iris, mfinal=10, 
+iris.boostcv <- boosting.cv(Species ~ ., v=2, data=iris, mfinal=5, 
 control=rpart.control(cp=0.01))
 iris.boostcv[-1]
 

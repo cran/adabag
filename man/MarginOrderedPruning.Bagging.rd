@@ -60,7 +60,7 @@ ind <- sample(3, nrow(Satellite), replace = TRUE, prob=c(0.3, 0.2,0.5))
 ## create bagging with training set
 #increase mfinal in your own execution of this example to see 
 #the real usefulness of this function
-Satellite.bagging<-bagging(classes~.,data=Satellite[ind==1,],mfinal=8)
+Satellite.bagging<-bagging(classes~.,data=Satellite[ind==1,],mfinal=3)
 #Satellite.bagging.pred<-predict(Satellite.bagging,Satellite[ind==3,])
 
 ##pruning bagging

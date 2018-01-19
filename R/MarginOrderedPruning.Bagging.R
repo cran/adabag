@@ -8,6 +8,9 @@ function(baggingObject,trainingset,pruningset,marginType="unsupervised",doTrace=
       
     prunedBagging<- list(formula=baggingObject$formula,trees=baggingObject$trees[myBestTreeIndex])
 
+#2016-11-15 pruebo a meter las clases de vardep como atributo de la salida porque lo uso en predict.bagging
+attr(prunedBagging, "vardep.summary") <- attributes(baggingObject)$vardep.summary 
+
    class(prunedBagging) <- "bagging"
    
       output<-list(prunedBagging=prunedBagging,AccuracyOrderedEnsemblePruningSet=MyentropyEachTree.order.pred$AccuracyOrderedEnsemble)

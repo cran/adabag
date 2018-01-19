@@ -13,7 +13,7 @@ citEntry(entry = "Article",
   url          = "http://www.jstatsoft.org/v54/i02/",
 
   textVersion  =
-  paste("Esteban Alfaro, Matias Gamez, Noelia Garcia (2013).",
+  paste("Alfaro, E., Gamez, M. Garcia, N.(2013).",
         "adabag: An R Package for Classification with Boosting and Bagging.",
         "Journal of Statistical Software, 54(2), 1-35.",
         "URL http://www.jstatsoft.org/v54/i02/.")

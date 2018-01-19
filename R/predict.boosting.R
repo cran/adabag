@@ -9,15 +9,16 @@ predict.boosting<- function (object, newdata, newmfinal=length(object$trees), ..
 #    mfinal <- length(object$trees)
     n <- length(newdata[, 1])
 
-#2015-07-26 lo cambio para pedict con unlabeled data 
+#2015-07-26 lo cambio para predict con unlabeled data 
 vardep.summary<-attributes(object)$vardep.summary
 
    nclases <- length(vardep.summary)
 
 #    nclases <- nlevels(vardep)
     pesos <- rep(1/n, n)
-    newdata <- data.frame(newdata, pesos)
-    pond <- object$weights[1:newmfinal] # para podar
+#    newdata <- data.frame(newdata, pesos) #2017-10-29 Ashima Honra suggestion
+    newdata <- cbind(newdata, pesos)
+   pond <- object$weights[1:newmfinal] # para podar
     #pred <- data.frame(rep(0, n))
     #for (m in 1:newmfinal) {
     #    if (m == 1) {pred <- predict(object$trees[[m]], newdata, type = "class")}

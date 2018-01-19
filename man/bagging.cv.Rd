@@ -10,7 +10,7 @@
 }
 
 \usage{
-bagging.cv(formula, data, v = 10, mfinal = 100, control)
+bagging.cv(formula, data, v = 10, mfinal = 100, control, par=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 
@@ -24,6 +24,9 @@ bagging.cv(formula, data, v = 10, mfinal = 100, control)
   \item{mfinal}{an integer, the number of iterations for which boosting is run 
 	or the number of trees to use. Defaults to \code{mfinal=100} iterations.}
   \item{control}{options that control details of the rpart algorithm. See rpart.control for more details.  }
+  \item{par}{ if \code{TRUE}, the cross validation process is runned in parallel. If \code{FALSE} (by default),
+ the function runs without parallelization.  }
+
 }
 
 \value{
@@ -57,7 +60,7 @@ bagging.cv(formula, data, v = 10, mfinal = 100, control)
 ## rpart library should be loaded
 library(rpart)
 data(iris)
-iris.baggingcv <- bagging.cv(Species ~ ., v=2, data=iris, mfinal=10,
+iris.baggingcv <- bagging.cv(Species ~ ., v=2, data=iris, mfinal=3,
 control=rpart.control(cp=0.01))
 iris.baggingcv[-1]
 

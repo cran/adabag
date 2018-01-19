@@ -54,7 +54,7 @@ the support of the correct class and the maximum support of an incorrect class}
 library(rpart)
 data(iris)
 sub <- c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
-iris.adaboost <- boosting(Species ~ ., data=iris[sub,], mfinal=10)
+iris.adaboost <- boosting(Species ~ ., data=iris[sub,], mfinal=3)
 margins(iris.adaboost,iris[sub,])->iris.margins # training set
 plot.margins(iris.margins)
 
@@ -64,7 +64,7 @@ margins(iris.predboosting,iris[-sub,])->iris.predmargins
 plot.margins(iris.predmargins,iris.margins)
 
 #Examples with bagging
-iris.bagging <- bagging(Species ~ ., data=iris[sub,], mfinal=5)
+iris.bagging <- bagging(Species ~ ., data=iris[sub,], mfinal=3)
 margins(iris.bagging,iris[sub,])->iris.bagging.margins # training set
 
 iris.predbagging<- predict.bagging(iris.bagging, newdata=iris[-sub,])

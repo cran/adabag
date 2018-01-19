@@ -16,7 +16,8 @@ pesos <- rep(1/n,n)
 guardarpesos <- array(0, c(n,mfinal)) #para ver los pesos de las observaciones
 
 w <- rep(1/n,n) # desaparece el not visible binding for "<<-" que se usa en boos=F
-data<-data.frame(pesos, data) #Los pesos en rpart deben ser una columna del dataframe
+#data<-data.frame(pesos, data) #Los pesos en rpart deben ser una columna del dataframe
+data<-cbind(pesos, data) #Los pesos en rpart deben ser una columna del dataframe
 
      arboles <- list() #Creamos una lista para guardar los arboles
 pond <- rep(0,mfinal) # Un vector donde guardaremos la ponderacion de cada arbol.
@@ -183,7 +184,7 @@ ans<- list(formula=formula, trees=arboles, weights=pond, votes=classfinal,prob=v
 #2015-07-25 pruebo a meter las clases de vardep como atributo de la salida
 attr(ans, "vardep.summary") <- summary(vardep, maxsum=700)
 
-mf <- model.frame(formula=formula, data=data) 
+mf <- model.frame(formula=formula, data=data[,-1]) 
 terms <- attr(mf, "terms") 
 ans$terms <- terms 
 ans$call <- match.call()

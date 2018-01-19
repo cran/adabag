@@ -92,7 +92,7 @@ error.rpart <- 1-(sum(diag(tb))/sum(tb))
 tb
 error.rpart
 
-BC.adaboost <- boosting(Class ~.,data=BreastCancer[,-1],mfinal=20, coeflearn="Freund", 
+BC.adaboost <- boosting(Class ~.,data=BreastCancer[,-1],mfinal=10, coeflearn="Freund", 
 boos=FALSE , control=rpart.control(maxdepth=3))
 
 #Using the pruning option

@@ -27,7 +27,9 @@ margen<-rep(0,n) #Creo un vector para guardar los margenes de cada observacion
 for (i in 1:n) {
  
 k<-votosporc[i, as.numeric(vardep[i])]-votosporc[i,]
-margen[i]<- min(k[k!=0])
+#margen[i]<- min(k[k!=0]) #Da problemas en caso de empate
+
+margen[i]<- min(k[-as.numeric(vardep[i])])
 
 }
 

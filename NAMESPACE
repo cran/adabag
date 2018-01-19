@@ -8,8 +8,11 @@ exportPattern(bagging, bagging.cv, boosting, boosting.cv, errorevol, margins, au
 # Import all packages listed as Imports or Depends
 import(
   rpart,
-  mlbench,
-  caret
+#  mlbench,
+  caret, 
+foreach, 
+doParallel 
+#, parallel 
 )
 
 S3method(predict, boosting)
@@ -20,3 +23,5 @@ S3method(plot, margins)
 #2015-10 lo añado
 importFrom("graphics", "abline", "barplot", "legend", "lines", "plot")
 importFrom("stats", "as.formula", "predict", "model.frame")
+#Prueba
+importFrom("parallel", "clusterEvalQ", "clusterExport", "detectCores", "makeCluster", "stopCluster")
