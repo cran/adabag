@@ -16,22 +16,23 @@ nclases <- nlevels(vardep)
 #newdata<-data.frame(newdata,pesos)
 
 # para poder hacerlo con bagging o con boosting
-if(class(object)=="bagging"){ponderacion<-rep(1,mfinal)}
+#if(class(object)=="bagging")
+if (inherits(object,"bagging")) {ponderacion<-rep(1,mfinal)}
 else{ponderacion<- object$weights}
 
 #pred<- data.frame(rep(0,n)) # Crea un dataframe para guardar las pred, al principio esta vacio, pero luego se va agnadiendo
 erroracum<-rep(0,mfinal)#Creo un vector para guardar los errores conforme evoluciona boosting
 
 #for (m in 1:mfinal) {
-#if(m==1){pred <- predict(object$trees[[m]],newdata,type="class")} 
-#else{pred <- data.frame(pred,predict(object$trees[[m]],newdata,type="class"))} 
+#if(m==1){pred <- predict(object$trees[[m]],newdata,type="class")}
+#else{pred <- data.frame(pred,predict(object$trees[[m]],newdata,type="class"))}
 #}
 
 pred<-as.data.frame(sapply (object$trees, predict, newdata=newdata, type="class"))
 
 
 
-mvotos <- list() #Creamos una lista para guardar una matriz para cada clase con sus votos (matrizvotos) 
+mvotos <- list() #Creamos una lista para guardar una matriz para cada clase con sus votos (matrizvotos)
 
 classfinal <- array(0, c(n,nlevels(vardep)))
 
@@ -53,7 +54,7 @@ for (i in 1:nlevels(vardep)) {classfinal[,i] <- apply(cbind(classfinal[,i],mvoto
 
 
 predclass <- rep("O",n)
-#2014-11-12 Se puede hacer esto usando apply para evitar el bucle? 
+#2014-11-12 Se puede hacer esto usando apply para evitar el bucle?
 #Creo la funcion "select" que en caso de empate devuelva la clase mayoritaria de entre las empatadas
 #predclass[]<-apply(classfinal,1,FUN=select, vardep=vardep)
 #2015-07-25 modifico la funcion select para poder usar predict con unlabeled data

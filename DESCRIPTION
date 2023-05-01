@@ -1,8 +1,8 @@
 Package: adabag
 Type: Package
 Title: Applies Multiclass AdaBoost.M1, SAMME and Bagging
-Version: 4.2
-Date: 2018-01-10
+Version: 4.3
+Date: 2023-04-26
 Author: Alfaro, Esteban; Gamez, Matias and Garcia, Noelia; with contributions from Li Guo
 Maintainer: Esteban Alfaro <Esteban.Alfaro@uclm.es>
 Depends: rpart, caret, foreach, doParallel
@@ -23,8 +23,9 @@ Description: It implements Freund and Schapire's Adaboost.M1 algorithm and Breim
 	available importanceplot(), plot.errorevol() and plot.margins(). Version 4.1 allows to predict on 
 	unlabeled data. Version 4.2 includes the parallel computation option for some of the functions.
 License: GPL (>= 2)
+Encoding: UTF-8
 LazyLoad: yes
 NeedsCompilation: no
-Packaged: 2018-01-18 09:32:23 UTC; emilio
+Packaged: 2023-05-01 14:47:21 UTC; esteb
 Repository: CRAN
-Date/Publication: 2018-01-19 14:52:39 UTC
+Date/Publication: 2023-05-01 16:40:06 UTC
