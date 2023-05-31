@@ -1,11 +1,12 @@
 Package: adabag
 Type: Package
 Title: Applies Multiclass AdaBoost.M1, SAMME and Bagging
-Version: 4.3
-Date: 2023-04-26
-Author: Alfaro, Esteban; Gamez, Matias and Garcia, Noelia; with contributions from Li Guo
+Version: 5.0
+Date: 2023-05-30
+Author: Alfaro, Esteban; Gamez, Matias and Garcia, Noelia; with contributions from L. Guo, A. Albano, M. Sciandra and A. Plaia 
 Maintainer: Esteban Alfaro <Esteban.Alfaro@uclm.es>
-Depends: rpart, caret, foreach, doParallel
+Depends: rpart, caret, foreach, doParallel, R (>= 4.0.0)
+Imports: methods, tidyr, dplyr, ConsRank (>= 2.1.3)
 Suggests: mlbench
 Description: It implements Freund and Schapire's Adaboost.M1 algorithm and Breiman's Bagging
 	algorithm using classification trees as individual classifiers. Once these classifiers have been
@@ -21,11 +22,14 @@ Description: It implements Freund and Schapire's Adaboost.M1 algorithm and Breim
 	these trees. Version 4.0 includes the margin-based ordered aggregation for Bagging pruning (Guo
 	and Boukir, 2013) and a function to auto prune the 'rpart' tree. Moreover, three new plots are also 
 	available importanceplot(), plot.errorevol() and plot.margins(). Version 4.1 allows to predict on 
-	unlabeled data. Version 4.2 includes the parallel computation option for some of the functions.
+	unlabeled data. Version 4.2 includes the parallel computation option for some of the functions. 
+	Version 5.0 includes the Boosting and Bagging algorithms for label ranking (Albano, Sciandra
+	and Plaia, 2023).
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyLoad: yes
+LazyData: true
 NeedsCompilation: no
-Packaged: 2023-05-01 14:47:21 UTC; esteb
+Packaged: 2023-05-30 10:47:01 UTC; Esteban.Alfaro
 Repository: CRAN
-Date/Publication: 2023-05-01 16:40:06 UTC
+Date/Publication: 2023-05-31 17:00:07 UTC

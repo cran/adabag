@@ -2,17 +2,21 @@
 # Export all names
 #exportPattern(".")
 
-exportPattern(bagging, bagging.cv, boosting, boosting.cv, errorevol, margins, autoprune,MarginOrderedPruning.Bagging, importanceplot)
+exportPattern(bagging, bagging.cv, boosting, boosting.cv, errorevol, margins,
+autoprune,MarginOrderedPruning.Bagging, importanceplot, prep.data, Ensemble_ranking_IW, errorevol_ranking_vector_IW)
 
 
 # Import all packages listed as Imports or Depends
 import(
   rpart,
 #  mlbench,
-  caret, 
-foreach, 
-doParallel 
-#, parallel 
+  caret,
+foreach,
+doParallel,
+#, parallel
+ConsRank,
+dplyr,
+tidyr
 )
 
 S3method(predict, boosting)
@@ -20,8 +24,11 @@ S3method(predict, bagging)
 S3method(plot, errorevol)
 S3method(plot, margins)
 
-#2015-10 lo añado
+#2015-10 I added it
 importFrom("graphics", "abline", "barplot", "legend", "lines", "plot")
-importFrom("stats", "as.formula", "predict", "model.frame")
+importFrom("stats", "as.formula", "predict", "model.frame", "complete.cases")
 #Prueba
 importFrom("parallel", "clusterEvalQ", "clusterExport", "detectCores", "makeCluster", "stopCluster")
+importFrom("ConsRank", "univranks")
+importFrom("dplyr", "left_join")
+importFrom("methods", "is")
